@@ -236,5 +236,99 @@ const delComment = async (commentID) => {
     return result;
 };
 
+// Displaying reviews
 
-export { addUser, getUsers, getUser,editUser, delUser, addService, getServices, getService, editService, delServ, addBlog, getBlogs, getBlog, editBlog, delBlog, login, addRev, getRevs, getRev, delRev, addComment, getComments, getComment, delComment };
+const revDisplay = async(req,res)=>{
+    const [display] = await pool.query(`
+    SELECT reviews.revID, reviews.content, users.username
+    FROM reviews
+    INNER JOIN users ON reviews.userID = users.userID;
+    `)
+    return display
+}
+
+
+const commDisplay = async(req,res)=>{
+    const [display] = await pool.query(`
+    SELECT comments.commentID, comments.comment, users.username
+    FROM comments
+    INNER JOIN users ON comments.userID = users.userID;
+    `)
+    return display
+}
+
+const makeApp = async(req,res)=>{
+    const [appointment] = await pool.query(`
+        SELECT DATE_FORMAT(appointment_datetime, '%Y-%m-%d %H:%i') as appointment_datetime
+        FROM (
+        SELECT 
+        DATE_ADD(CURRENT_DATE(), INTERVAL n.n DAY) AS appointment_date,
+        TIME('08:00:00') AS appointment_time
+        FROM (
+        SELECT a.N + b.N * 10 + c.N * 100 AS n
+        FROM (
+            SELECT 0 AS N UNION ALL SELECT 1 UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4 UNION ALL
+            SELECT 5 UNION ALL SELECT 6 UNION ALL SELECT 7 UNION ALL SELECT 8 UNION ALL SELECT 9
+        ) AS a
+        CROSS JOIN (
+            SELECT 0 AS N UNION ALL SELECT 1 UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4 UNION ALL
+            SELECT 5 UNION ALL SELECT 6 UNION ALL SELECT 7 UNION ALL SELECT 8 UNION ALL SELECT 9
+        ) AS b
+        CROSS JOIN (
+            SELECT 0 AS N UNION ALL SELECT 1 UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4 UNION ALL
+            SELECT 5 UNION ALL SELECT 6 UNION ALL SELECT 7 UNION ALL SELECT 8 UNION ALL SELECT 9
+        ) AS c
+        ) AS numbers
+        ) AS dates
+        JOIN (
+        SELECT '08:00' AS appointment_time UNION ALL
+        SELECT '09:00' UNION ALL
+        SELECT '10:00' UNION ALL
+        SELECT '11:00' UNION ALL
+        SELECT '12:00' UNION ALL
+        SELECT '13:00' UNION ALL
+        SELECT '14:00' UNION ALL
+        SELECT '15:00' UNION ALL
+        SELECT '16:00' UNION ALL
+        SELECT '17:00'
+        ) AS times
+        ON true
+        LEFT JOIN (
+        SELECT DATE_FORMAT(appDate, '%Y-%m-%d %H:%i') as appointment_datetime
+        FROM appointments
+        WHERE appDate >= CURRENT_DATE()
+        AND appDate < DATE_ADD(CURRENT_DATE(), INTERVAL 3 MONTH)
+        ) AS taken_appointments
+        ON DATE_FORMAT(taken_appointments.appointment_datetime, '%Y-%m-%d %H:%i') = CONCAT(dates.appointment_date, ' ', times.appointment_time)
+        WHERE taken_appointments.appointment_datetime IS NULL
+        ORDER BY dates.appointment_date, times.appointment_time;
+        `)
+        return appointment
+}
+
+const getApps = async(req,res)=>{
+    const [appointments] = await pool.query(`
+    SELECT * FROM appointments
+    `)
+    return appointments
+}
+
+const getApp = async(appID)=>{
+    const [appointment] = await pool.query(`
+    SELECT * 
+    FROM appointments 
+    WHERE appID = ?
+    `,[appID])
+    return appointment
+}
+
+const userApp = async(req,res)=>{
+    const [userAppointments] = await pool.query(`
+    SELECT *
+    FROM appointments
+    WHERE userID = ?
+    `, [userId]);
+    return userAppointments
+}
+
+export { addUser, getUsers, getUser,editUser, delUser, addService, getServices, getService, editService, delServ, addBlog, getBlogs, getBlog, editBlog, delBlog, login, addRev, getRevs, getRev, delRev, addComment, getComments, getComment, delComment, revDisplay, commDisplay, makeApp, getApps, getApp, userApp };

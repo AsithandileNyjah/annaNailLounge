@@ -1,4 +1,4 @@
-import {addUser, getUsers, getUser, editUser, delUser , addService, getServices, getService, editService, delServ, addBlog, getBlogs, getBlog, editBlog, delBlog, login, addRev, getRevs, getRev, delRev, getComments} from '../models/database.js'
+import {addUser, getUsers, getUser, editUser, delUser , addService, getServices, getService, editService, delServ, addBlog, getBlogs, getBlog, editBlog, delBlog, login, addRev, getRevs, getRev, delRev,addComment, getComments, revDisplay, commDisplay, makeApp, getApps, getApp} from '../models/database.js'
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 import {pool} from '../config/config.js'
@@ -269,5 +269,69 @@ const delComm = async (req,res)=>{
     res.send(await getComments())
 }
 
+const displayRev = async (req, res) => {
+    try {
+        const reviews = await revDisplay();
+        res.status(200).json(reviews); 
+    } catch (error) {
+        console.error('Error fetching reviews:', error);
+        res.status(500).send('Internal Server Error');
+    }
+};
 
-export{addOne, getAll, getOne, ediOne,delOne, servAdd, getServs, getServ, editServ, servDel, blogAdd, gBlogs, gBlog, blogEdit, blogDel, valFun, revAdd, revsGet, revGet, revDel, commAdd, commsGet, commGet, delComm}
+const displayComms = async (req, res) => {
+    try {
+        const comments = await commDisplay(); // Calling the database function
+        res.status(200).json(comments); // Sending the comments data as JSON response
+    } catch (error) {
+        console.error('Error fetching comments:', error);
+        res.status(500).send('Internal Server Error'); // Sending internal server error response
+    }
+};
+
+
+const appMake = async (req, res) => {
+    try {
+        if (!req.token) {
+            return res.status(401).send({ msg: "Please log in to make an appointment" });
+        }
+
+        // Call the makeApp function from the database module
+        const appointments = await makeApp(req, res);
+
+        // Send the appointments data as a response
+        res.status(200).json(appointments);
+    } catch (error) {
+        console.error('Error making appointment:', error);
+        res.status(500).send('Internal Server Error');
+    }
+};
+
+const appsGet = async(req,res)=>{
+    res.send(await getApps())
+}
+
+const appGet = async(req,res)=>{
+    res.send(await getApp(+req.params.appID))
+}
+
+const getUserAppointments = async (req, res) => {
+    try {
+        const token = req.headers.authorization;
+        if (!token) {
+            return res.status(401).json({ error: 'Unauthorized. Token missing.' });
+        }
+        const decodedToken = jwt.verify(token, SECRET_KEY);
+        const userId = decodedToken.userId;
+        const username = decodedToken.username;
+        const userAppointments = await userApp(req, res, userId);
+
+        res.status(200).json({ username, appointments: userAppointments });
+    } catch (error) {
+        console.error('Error fetching user appointments:', error);
+        res.status(500).send('Internal Server Error');
+    }
+};
+
+
+export{addOne, getAll, getOne, ediOne,delOne, servAdd, getServs, getServ, editServ, servDel, blogAdd, gBlogs, gBlog, blogEdit, blogDel, valFun, revAdd, revsGet, revGet, revDel, commAdd, commsGet, commGet, delComm, displayRev, displayComms, appMake, appsGet, appGet, getUserAppointments}
