@@ -47,11 +47,14 @@ mutations: {
       return user;
     });
   },
+  setLogged(state,payload){
+    state.loggedIn = payload
+  },
 },
 actions: {
-      async createUser({ commit }, userData) {
+      async addUser({ commit }, userData) {
         try {
-            const response = await fetch('/api/addOne', {
+            const response = await fetch(`${baseURL}/users`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -70,7 +73,8 @@ actions: {
             console.error('Error creating user:', error);
             commit('setError', 'An error occurred while creating the user.');
         }
-    },
+        console.log(userData);
+          },
   async fetchUsers({ commit }) {
     try {
       const response = await axios.get(`${baseURL}/users`);
@@ -156,7 +160,40 @@ actions: {
       throw new Error('Failed to fetch appointments. Please try again later.');
     }
   },
-},
+  async checkUser({ commit }, { username, userPass }) {
+    try {
+      let userData = { username, userPass };
+      let response = await fetch(`${baseURL}/login`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(userData)
+      });
+  
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+  
+      let data = await response.json();
+  
+      if (data && data.token) {
+        // Set token as cookie
+        $cookies.set('jwt', data.token);
+        // Set user as logged in
+        commit('setLogged', true);
+        // Redirect to home page
+        await router.push('/');
+      } else {
+        console.error('Invalid response from server:', data);
+        throw new Error('Invalid response from server');
+      }
+    }catch (error) {
+      console.error('Login failed:', error);
+      throw new Error('Login failed');
+    }    
+  }  
+    },
 modules: {
 }
 })

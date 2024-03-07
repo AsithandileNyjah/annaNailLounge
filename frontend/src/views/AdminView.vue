@@ -8,18 +8,20 @@
             Column
         </div>
         <div class="col">
-            Column
+            <AddUser></AddUser>
         </div>
         </div>
     </div>
 </template>
 
 <script>
-import Users from '../components/Users.vue'; // Assuming Users.vue is the file containing the Users component
+import Users from '../components/Users.vue';
+import AddUser from '../components/AddUser.vue'
 
 export default {
   components: {
-    Users // Register the Users component
+    Users,
+    AddUser
   }
 };
 </script>

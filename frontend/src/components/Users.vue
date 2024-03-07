@@ -1,7 +1,9 @@
 <template>
     <div>
       <h2>Users</h2>
-      <div v-if="loading">Loading...</div>
+      <div v-if="loading" class="spinner-grow" role="status">
+      <span class="visually-hidden">Loading...</span>
+      </div>
       <div v-else>
         <table>
           <thead>
