@@ -162,27 +162,21 @@ const valFun = async (req, res) => {
         }
 
         // Compare passwords
-        bcrypt.compare(userPass, hashedPassword, (err, result) => {
-            if (err) {
-                console.error(err);
-                return res.status(500).json({ msg: 'An error occurred' });
-            }
-            if (result === true) {
-                // Generate JWT token
-                const token = jwt.sign({ username: username }, process.env.SECRET_KEY, { expiresIn: '1h' });
-                // Set token as cookie
-                res.cookie('jwt', token, { httpOnly: true });
-                return res.status(200).json({ token: token, msg: 'YAY! You have logged in.' });
-            } else {
-                return res.status(401).json({ msg: 'Invalid username or password' });
-            }
-        });
+        const match = await bcrypt.compare(userPass, hashedPassword);
+        if (match) {
+            // Generate JWT token
+            const token = jwt.sign({ username: username }, process.env.SECRET_KEY, { expiresIn: '1h' });
+            // Set token as cookie
+            res.cookie('jwt', token, { httpOnly: true });
+            return res.status(200).json({ msg: 'YAY! You have logged in.' });
+        } else {
+            return res.status(401).json({ msg: 'Invalid username or password' });
+        }
     } catch (error) {
         console.error(error);
         return res.status(500).json({ msg: 'An error occurred' });
     }
 };
-
 
 const revAdd = async (req, res) => {
     try {
