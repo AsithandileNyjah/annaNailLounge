@@ -178,6 +178,13 @@ const valFun = async (req, res) => {
     }
 };
 
+const isAdmin = async (req, res) => {
+    const { username } = req.body;
+    res.send(await adminRights(username));
+};
+
+
+
 const revAdd = async (req, res) => {
     try {
         const { content } = req.body;
@@ -192,10 +199,8 @@ const revAdd = async (req, res) => {
                 return res.status(403).send({ msg: "Forbidden. Invalid token." });
             }
 
-            const username = decoded.username; // Extract username from decoded JWT token
-
-            // Proceed to add review with the associated username
-            await addRev(content, username); // Pass username to addRev function
+            const username = decoded.username;
+            await addRev(content, username); 
             res.status(200).send({ msg: "Review added successfully." });
         });
     } catch (error) {
@@ -324,4 +329,4 @@ const getUserAppointments = async (req, res) => {
 };
 
 
-export{addOne, getAll, getOne, ediOne,delOne, servAdd, getServs, getServ, editServ, servDel, blogAdd, gBlogs, gBlog, blogEdit, blogDel, valFun, revAdd, revsGet, revGet, revDel, commAdd, commsGet, commGet, delComm, displayRev, displayComms, appMake, appsGet, appGet, getUserAppointments}
+export{addOne, getAll, getOne, ediOne,delOne, servAdd, getServs, getServ, editServ, servDel, blogAdd, gBlogs, gBlog, blogEdit, blogDel, valFun, revAdd, revsGet, revGet, revDel, commAdd, commsGet, commGet, delComm, displayRev, displayComms, appMake, appsGet, appGet, getUserAppointments, isAdmin}

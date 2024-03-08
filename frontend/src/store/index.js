@@ -1,6 +1,6 @@
 import { createStore } from 'vuex'
 import axios from 'axios'
-const baseURL = 'https://annanaillounge.onrender.com'
+const baseURL = 'https://annanaillounge-1.onrender.com'
 
 export default createStore({
 state: {
@@ -10,13 +10,18 @@ state: {
   reviews: [],
   comments: [],
   appointments: [],
-  error:null
+  error:null,
+  isAdmin: false
 },
 getters: {
+  isAdmin: state => state.isAdmin
 },
 mutations: {
   setUsers(state, users) {
     state.users = users;
+  },
+  setAdminRights(state, userRole) {
+    state.userRole = userRole;
   },
   deleteUser(state, userId) {
     state.users = state.users.filter(user => user.userId !== userId);
@@ -50,6 +55,9 @@ mutations: {
   setLogged(state,payload){
     state.loggedIn = payload
   },
+  setAdminRights(state, isAdmin) {
+    state.isAdmin = isAdmin;
+  }
 },
 actions: {
       async addUser({ commit }, userData) {
@@ -82,6 +90,21 @@ actions: {
     } catch (error) {
       console.error('Error fetching users:', error);
       throw new Error('Failed to fetch users. Please try again later.');
+    }
+  },
+  async fetchAdminRights({ commit }, username) {
+    try {
+      const response = await fetch(`${baseURL}/login`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ username })
+      });
+      const data = await response.json();
+      commit('setAdminRights', data.userRole);
+    } catch (error) {
+      console.error('Error fetching admin rights:', error);
     }
   },
   async deleteUser({ commit }, userId) {
@@ -175,10 +198,10 @@ actions: {
         throw new Error('Network response was not ok');
       }
       let data = await response.json();
-      if (data && token.token) {
+      if (data && data.token) {
         $cookies.set('jwt', data.token);
-        commit('setLogged', false);
-        router.push('/');
+        commit('setLogged', true);
+        window.location.reload()
       } else {
         throw new Error('Invalid response from server');
       }

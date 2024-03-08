@@ -9,7 +9,8 @@
                 <label for="password" class="form-label">Password</label>
                 <input type="password" class="form-control" id="password" v-model="userPass" required>
             </div>
-            <button type="submit" class="btn btn-primary">Log In</button>
+            <button type="submit" class="btn btn-primary" v-if="!$cookies.get('jwt')">Log In</button>
+            <button type="submit" class="btn btn-primary" v-if="$cookies.get('jwt')">Log Out</button>
         </form>
     </div>
 </template>

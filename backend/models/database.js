@@ -169,14 +169,15 @@ const login = async (username) => {
     return userPass;
 };
 
-const adminRights = async(username, userPass)=>{
-    const [[{userRole}]] = await pool.query(`
-    SELECT userRole
-    FROM users 
-    WHERE username = ? && userPass = ?
-    `[username, userPass])
-    return userRole
-}
+const adminRights = async (username) => {
+    const [[{ userRole }]] = await pool.query(`
+        SELECT userRole
+        FROM users
+        WHERE username = ?
+    `, [username]);
+    return userRole;
+};
+
 
 
 // reviews

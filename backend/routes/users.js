@@ -1,6 +1,6 @@
 import express from 'express';
 
-import {addOne, ediOne, getAll,delOne, getOne, servAdd, getServs, getServ, editServ, servDel, blogAdd, gBlogs, gBlog, blogEdit, blogDel, valFun, revAdd, revsGet, revGet, revDel, commAdd, commsGet, commGet, delComm,  displayRev, displayComms, appMake, appsGet, appGet, getUserAppointments } from '../controller/controller.js';
+import {addOne, ediOne, getAll,delOne, getOne, servAdd, getServs, getServ, editServ, servDel, blogAdd, gBlogs, gBlog, blogEdit, blogDel, valFun, isAdmin, revAdd, revsGet, revGet, revDel, commAdd, commsGet, commGet, delComm,  displayRev, displayComms, appMake, appsGet, appGet, getUserAppointments } from '../controller/controller.js';
 
 const router = express.Router()
 
@@ -31,6 +31,10 @@ router.route('/login').post(valFun,(req,res)=>{
         msg: "YAY! You have logged in."
     })
 })
+
+// adminRights
+
+router.route('/login').get(isAdmin)
 
 // Reviews
 router.route('/reviews').post(revAdd);
