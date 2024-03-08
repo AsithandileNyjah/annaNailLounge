@@ -289,11 +289,7 @@ const appMake = async (req, res) => {
         if (!req.token) {
             return res.status(401).send({ msg: "Please log in to make an appointment" });
         }
-
-        // Call the makeApp function from the database module
         const appointments = await makeApp(req, res);
-
-        // Send the appointments data as a response
         res.status(200).json(appointments);
     } catch (error) {
         console.error('Error making appointment:', error);
