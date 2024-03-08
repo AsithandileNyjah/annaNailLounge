@@ -1,4 +1,4 @@
-import {addUser, getUsers, getUser, editUser, delUser , addService, getServices, getService, editService, delServ, addBlog, getBlogs, getBlog, editBlog, delBlog, login, addRev, getRevs, getRev, delRev,addComment, getComments, revDisplay, commDisplay, makeApp, getApps, getApp} from '../models/database.js'
+import {addUser, getUsers, getUser, editUser, delUser , addService, getServices, getService, editService, delServ, addBlog, getBlogs, getBlog, editBlog, delBlog, login, addRev, getRevs, getRev, delRev,addComment, getComments, revDisplay, commDisplay, makeApp, getApps, getApp, adminRights} from '../models/database.js'
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 import {pool} from '../config/config.js'
@@ -168,7 +168,7 @@ const valFun = async (req, res) => {
             const token = jwt.sign({ username: username }, process.env.SECRET_KEY, { expiresIn: '1h' });
             // Set token as cookie
             res.cookie('jwt', token, { httpOnly: true });
-            return res.status(200).json({ msg: 'YAY! You have logged in.' });
+            return res.status(200).json({ token:token, msg: 'YAY! You have logged in.' });
         } else {
             return res.status(401).json({ msg: 'Invalid username or password' });
         }

@@ -169,6 +169,15 @@ const login = async (username) => {
     return userPass;
 };
 
+const adminRights = async(username, userPass)=>{
+    const [[{userRole}]] = await pool.query(`
+    SELECT userRole
+    FROM users 
+    WHERE username = ? && userPass = ?
+    `[username, userPass])
+    return userRole
+}
+
 
 // reviews
 const addRev = async (content) => {
@@ -292,4 +301,4 @@ const userApp = async(req,res)=>{
     return userAppointments
 }
 
-export { addUser, getUsers, getUser,editUser, delUser, addService, getServices, getService, editService, delServ, addBlog, getBlogs, getBlog, editBlog, delBlog, login, addRev, getRevs, getRev, delRev, addComment, getComments, getComment, delComment, revDisplay, commDisplay, makeApp, getApps, getApp, userApp };
+export { addUser, getUsers, getUser,editUser, delUser, addService, getServices, getService, editService, delServ, addBlog, getBlogs, getBlog, editBlog, delBlog, login, addRev, getRevs, getRev, delRev, addComment, getComments, getComment, delComment, revDisplay, commDisplay, makeApp, getApps, getApp, userApp, adminRights };
