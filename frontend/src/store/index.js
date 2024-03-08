@@ -170,23 +170,16 @@ actions: {
         },
         body: JSON.stringify(userData)
       });
-      console.log(response);
-      console.log(userData);
   
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
-  
       let data = await response.json();
-      if (data && data.token) {
-        // Set token as cookie
+      if (data && token.token) {
         $cookies.set('jwt', data.token);
-        // Set user as logged in
-        commit('setLogged', true);
-        // Redirect to home page
-        router.push('/'); // Remove unnecessary await
+        commit('setLogged', false);
+        router.push('/');
       } else {
-        console.error('Invalid response from server:', data);
         throw new Error('Invalid response from server');
       }
     } catch (error) {
@@ -194,7 +187,7 @@ actions: {
       throw new Error('Login failed');
     }    
   }
-  
+    
     },
 modules: {
 }

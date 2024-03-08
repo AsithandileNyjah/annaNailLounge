@@ -167,8 +167,8 @@ const valFun = async (req, res) => {
             // Generate JWT token
             const token = jwt.sign({ username: username }, process.env.SECRET_KEY, { expiresIn: '1h' });
             // Set token as cookie
-            res.cookie('jwt', token, { httpOnly: true });
-            return res.status(200).json({ token:token, msg: 'YAY! You have logged in.' });
+            res.cookie('jwt', token, { httpOnly: false, expiresIn: '1h' });
+            return res.status(200).json({token:token});
         } else {
             return res.status(401).json({ msg: 'Invalid username or password' });
         }
