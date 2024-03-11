@@ -2,7 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import Users from '../components/Users.vue'
 import Appointment from '../components/Appointment.vue';
-import AddUser from '../components/AddUser.vue'
+import AddUser from '../components/AddUser.vue';
 
 const routes = [
   {

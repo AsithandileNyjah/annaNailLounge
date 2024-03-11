@@ -2,7 +2,7 @@
   <nav>
     <router-link to="/">Home</router-link> |
     <router-link to="/about">About</router-link> |
-    <router-link v-if="isAdmin"  to="/admin">Admin</router-link> |
+    <router-link v-if="$cookies.get('jwt')"  to="/admin">Admin</router-link> |
     <router-link to="/appointments">Appointments</router-link> |
     <router-link v-if="!$cookies.get('jwt')" to="/signup">Sign Up</router-link> |
     <router-link v-if="!$cookies.get('jwt')" to="/signin">Sign In</router-link> |

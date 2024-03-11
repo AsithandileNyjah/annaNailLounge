@@ -92,6 +92,15 @@ actions: {
       throw new Error('Failed to fetch users. Please try again later.');
     }
   },
+  async fetchServices({ commit }) {
+    try {
+      const response = await axios.get(`${baseURL}/services`);
+      commit('setServices', response.data);
+    } catch (error) {
+      console.error('Error fetching services:', error);
+      throw new Error('Failed to fetch services. Please try again later.');
+    }
+  },
   async fetchAdminRights({ commit }, username) {
     try {
       const response = await fetch(`${baseURL}/login`, {
@@ -137,6 +146,28 @@ actions: {
     } catch (error) {
       console.error("Error updating user:", error);
       throw new Error("Failed to update user. Please try again later.");
+    }
+  },
+  async editServ({ commit }, { servID, updatedService }) {
+    try {
+      const response = await fetch(
+        `${baseURL}/services/${servID}`,
+        {
+          method: "PATCH", // Assuming PATCH method is used for partial updates
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(updatedService),
+        }
+      );
+      if (!response.ok) {
+        throw new Error("Failed to update service");
+      }
+      
+      commit("updatedService", updatedUser);
+    } catch (error) {
+      console.error("Error updating service:", error);
+      throw new Error("Failed to update service. Please try again later.");
     }
   },
   async makeAppointment({ commit }) {
