@@ -1,27 +1,25 @@
 <template>
     <div class="container">
-        <div class="row">
-        <div class="col">
-            <Users></Users>
-        </div>
-        <div class="col">
-            Column
-        </div>
-        <div class="col">
-            <AddUser></AddUser>
-        </div>
-        </div>
+        <h1>Users</h1>
+        <Users></Users>
+        <br>
+        <Services></Services>
+        <br>
+        <h1>Add A User</h1>
+        <AddUser></AddUser>
     </div>
 </template>
 
 <script>
 import Users from '../components/Users.vue';
 import AddUser from '../components/AddUser.vue'
+import Services from '../components/Services.vue';
 
 export default {
   components: {
     Users,
-    AddUser
+    AddUser,
+    Services
   }
 };
 </script>

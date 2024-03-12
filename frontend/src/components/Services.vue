@@ -7,32 +7,30 @@
         <table>
           <thead>
             <tr>
-              <th>User ID</th>
-              <th>First Name</th>
-              <th>Last Name</th>
-              <th>Email Address</th>
-              <th>Username</th>
-              <th>User Role</th>
+              <th>Service ID</th>
+              <th>Service Name</th>
+              <th>Service Description</th>
+              <th>Service Price</th>
+              <th>Service Picture</th>
               <th>Edit</th>
               <th>Delete</th>
             </tr>
           </thead>
           <tbody>
-            <tr v-for="user in users" :key="user.userID">
-              <td>{{ user.userID }}</td>
-              <td>{{ user.firstName }}</td>
-              <td>{{ user.lastName }}</td>
-              <td>{{ user.emailAdd }}</td>
-              <td>{{ user.username }}</td>
-              <td>{{ user.userRole }}</td>
+            <tr v-for="service in services" :key="service.servID">
+              <td>{{ service.servID }}</td>
+              <td>{{ service.servName }}</td>
+              <td>{{ service.servDesc }}</td>
+              <td>R{{ service.servPrice }}</td>
+              <td><img :src="service.servPic" alt=""></td>
               <td>
                 <!-- Button trigger modal -->
-                <button type="button" class="btn btn-primary" data-bs-toggle="modal" :data-bs-target="'#editModal-' + user.userID" @click="editUser(user)">
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" :data-bs-target="'#ediMod-' + service.servID" @click="editedService(service)">
                   Edit
                 </button>
   
                 <!-- Modal -->
-                <div class="modal fade" :id="'editModal-' + user.userID" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" ref="editModal-{{ user.userID }}">
+                <div class="modal fade" :id="'#ediMod-' + service.servID" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" ref="#ediMod-{{ service.servID }}">
                   <div class="modal-dialog">
                     <div class="modal-content">
                       <div class="modal-header">
@@ -43,30 +41,30 @@
                         <!-- Form for editing user -->
                         <div class="mb-3">
                           <label for="firstName" class="form-label">First Name</label>
-                          <input type="text" class="form-control" id="firstName" v-model="updatedUser.firstName">
+                          <input type="text" class="form-control" id="firstName" v-model="updatedService.servName">
                         </div>
                         <div class="mb-3">
                           <label for="lastName" class="form-label">Last Name</label>
-                          <input type="text" class="form-control" id="lastName" v-model="updatedUser.lastName">
+                          <input type="text" class="form-control" id="lastName" v-model="updatedService.servDesc">
                         </div>
                         <div class="mb-3">
                           <label for="lastName" class="form-label">Email Address</label>
-                          <input type="text" class="form-control" id="lastName" v-model="updatedUser.emailAdd">
+                          <input type="text" class="form-control" id="lastName" v-model="updatedService.servPrice">
                         </div>
                         <div class="mb-3">
                           <label for="lastName" class="form-label">Username</label>
-                          <input type="text" class="form-control" id="lastName" v-model="updatedUser.username">
+                          <input type="text" class="form-control" id="lastName" v-model="updatedService.servPrice">
                         </div>
                       </div>
                       <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary" @click="saveChanges(user.userID)">Save Changes</button>
+                        <button type="button" class="btn btn-primary" @click="saveChanges(service.servID)">Save Changes</button>
                       </div>
                     </div>
                   </div>
                 </div>
               </td>
-              <td><button type="button" class="btn btn-danger" @click="deleteUser(user.userID)">Delete</button></td>
+              <td><button type="button" class="btn btn-danger" @click="deleteUser(service.servID)">Delete</button></td>
             </tr>
           </tbody>
         </table>
@@ -76,11 +74,11 @@
   
 <script>
 export default {
-name: 'Users',
+name: 'Services',
 data() {
     return {
     loading: false,
-    updatedUser: {
+    updatedService: {
         firstName: null,
         lastName: null,
         emailAdd: null,
@@ -89,48 +87,47 @@ data() {
     };
 },
 computed: {
-    users() {
-    return this.$store.state.users;
+    services() {
+    return this.$store.state.services;
     },
 },
 methods: {
-    async fetchUsers() {
+    async fetchServices() {
     this.loading = true;
     try {
-        await this.$store.dispatch('fetchUsers');
+        await this.$store.dispatch('fetchServices');
     } catch (error) {
-        console.error('Error fetching users:', error.message);
+        console.error('Error fetching service:', error.message);
     } finally {
         this.loading = false;
     }
     },
-    async deleteUser(userId) {
+    async deleteService(servID) {
     try {
-        await this.$store.dispatch('deleteUser', userId);
+        await this.$store.dispatch('deleteService', servID);
     } catch (error) {
-        console.error('Error deleting user:', error.message);
+        console.error('Error deleting service:', error.message);
     }
     },
-    editUser(user) {
-    this.updatedUser = {
-        userID: user.userID,
-        firstName: user.firstName,
-        lastName: user.lastName,
-        emailAdd: user.emailAdd,
-        username: user.username,
-        userRole: user.userRole
+    editedService(service) {
+    this.updatedService = {
+        servID: service.servID,
+        serviceName: service.servName,
+        serviceDescription: service.servDesc,
+        servicePrice: service.servPrice,
+        servicePicture: service.servPic,
     };
     },
-    async saveChanges(userID) {
+    async saveChanges(servID) {
       try {
-        await this.$store.dispatch('editUser', { userID, updatedUser: this.updatedUser });
+        await this.$store.dispatch('editService', { servID, updatedService: this.updatedService });
       } catch (error) {
-        console.error('Error updating user:', error.message);
+        console.error('Error updating service:', error.message);
       }
     }
 },
 created() {
-    this.fetchUsers();
+    this.fetchServices();
 },
 };
 </script>
@@ -149,5 +146,10 @@ padding: 8px;
 
 th {
 background-color: #f2f2f2;
+}
+
+img{
+    width: 100px;
+    height: 100px;
 }
 </style>

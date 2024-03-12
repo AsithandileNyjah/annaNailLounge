@@ -11,7 +11,6 @@ state: {
   comments: [],
   appointments: [],
   error:null,
-  isAdmin: false
 },
 getters: {
   isAdmin: state => state.isAdmin
@@ -19,9 +18,6 @@ getters: {
 mutations: {
   setUsers(state, users) {
     state.users = users;
-  },
-  setAdminRights(state, userRole) {
-    state.userRole = userRole;
   },
   deleteUser(state, userId) {
     state.users = state.users.filter(user => user.userId !== userId);
@@ -55,9 +51,6 @@ mutations: {
   setLogged(state,payload){
     state.loggedIn = payload
   },
-  setAdminRights(state, isAdmin) {
-    state.isAdmin = isAdmin;
-  }
 },
 actions: {
       async addUser({ commit }, userData) {
@@ -99,21 +92,6 @@ actions: {
     } catch (error) {
       console.error('Error fetching services:', error);
       throw new Error('Failed to fetch services. Please try again later.');
-    }
-  },
-  async fetchAdminRights({ commit }, username) {
-    try {
-      const response = await fetch(`${baseURL}/login`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ username })
-      });
-      const data = await response.json();
-      commit('setAdminRights', data.userRole);
-    } catch (error) {
-      console.error('Error fetching admin rights:', error);
     }
   },
   async deleteUser({ commit }, userId) {
@@ -181,7 +159,9 @@ actions: {
     async fetchBlogs({ commit }) {
     try {
       const response = await axios.get(`${baseURL}/blogs`);
+      console.log(response);
       commit('setBlogs', response.data);
+      console.log(response.data);
     } catch (error) {
       console.error('Error fetching blogs:', error.response.data);
       throw new Error('Failed to fetch blogs. Please try again later.');

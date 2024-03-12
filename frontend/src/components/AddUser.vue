@@ -4,7 +4,6 @@
             <span class="visually-hidden">Loading...</span>
         </div>
         <div v-else>
-            <h5>Sign Up</h5>
             <div class="mb-3">
                 <label for="firstName" class="form-label">First Name</label>
                 <input type="text" class="form-control" id="firstName" v-model="user.firstName" required>

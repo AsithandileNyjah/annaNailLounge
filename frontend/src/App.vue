@@ -6,6 +6,7 @@
     <router-link to="/appointments">Appointments</router-link> |
     <router-link v-if="!$cookies.get('jwt')" to="/signup">Sign Up</router-link> |
     <router-link v-if="!$cookies.get('jwt')" to="/signin">Sign In</router-link> |
+    <router-link to="/blogs">Blogs</router-link> |
   </nav>
   <router-view/>
 </template>
@@ -34,19 +35,4 @@ nav a.router-link-exact-active {
 </style>
 
 <script>
-import { mapGetters } from 'vuex';
-
-export default {
-  computed: {
-    ...mapGetters(['isAdmin'])
-  },
-  mounted() {
-    this.fetchAdminRights('username'); // Replace 'username' with actual username
-  },
-  methods: {
-    async fetchAdminRights(username) {
-      await this.$store.dispatch('fetchAdminRights', username);
-    }
-  }
-};
 </script>
