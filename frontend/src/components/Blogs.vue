@@ -1,23 +1,31 @@
 <template>
-    <div>
-        <p>
-  <a v-for="blog in blogs" :key="blog.blogID" class="btn btn-primary" data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
-    {{ blog.blogTitle }}
-  </a>
-</p>
-<div v-for="blog in blogs" :key="blog.blogID" class="collapse" id="collapseExample">
-  <div class="card card-body">
-    {{ blog.blog }}
-  </div>
-</div>
+        <div>
+        <div v-if="loading" class="spinner-grow" role="status">
+        <span class="visually-hidden">Loading...</span>
+        </div>
+        <div v-else>
+        <div class="row container-fluid">
+            <div class="col-md-4" v-for="blog in blogs" :key="blog.blogID">
+            <div class="card" style="width: 18rem;">
+                <img :src="blog.blogCover" class="card-img-top">
+                <div class="card-body">
+                <h5 class="card-title">{{ blog.blogTitle }}</h5>
+                <p class="card-text">{{ blog.intro }}</p>
+                <button class="btn btn-primary">Read</button>
+                </div>
+            </div>
+            </div>
+        </div>
+        </div>
     </div>
 </template>
 
 <script>
 export default {
 name: 'Blogs',
-data() {
+data(){
     return {
+    loading: false,
     blogs: []
     };
 },
@@ -36,8 +44,10 @@ methods: {
     } catch (error) {
         console.error('Error fetching blogs:', error.message);
         this.error = ('Failed to fetch blogs. Please try again later.');
+    }finally {
+        this.loading = false;
     }
-    }
+    },
 }
 }
 

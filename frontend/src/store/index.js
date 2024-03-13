@@ -148,9 +148,16 @@ actions: {
       throw new Error("Failed to update service. Please try again later.");
     }
   },
-  async makeAppointment({ commit }) {
+  async makeAppointment({ commit }, appData) {
     try {
-        const response = await axios.post(`${baseURL}/appointments`);
+        const response = await axios.post(`${baseURL}/appointments`, {
+          method: 'POST',
+          headers:{
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(appData)
+        });
+        const appo = await response.json()
         commit('setAppointments', response.data);
     } catch (error) {
         commit('SET_ERROR', error.message);
