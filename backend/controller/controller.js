@@ -1,5 +1,5 @@
 import {addUser, getUsers, getUser, editUser, delUser , addService, getServices, getService, editService, delServ, addBlog, getBlogs, getBlog, editBlog, delBlog, login, addRev, getRevs, getRev, delRev,addComment, getComments, revDisplay, commDisplay, makeApp, getApps, getApp, adminRights} from '../models/database.js'
-import {authMiddleware} from '../middleware/middleware.js'
+import {authMiddleware, validate} from '../middleware/middleware.js'
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 import {pool} from '../config/config.js'
@@ -156,23 +156,26 @@ const valFun = async (req, res) => {
             return res.status(400).json({ msg: 'Invalid password' });
         }
 
-        // Retrieve hashed password from the database
-        const hashedPassword = await login(username);
-        if (!hashedPassword) {
-            return res.status(401).json({ msg: 'Invalid username or password' });
-        }
+        // This middleware will ensure token presence and validity
+        validate(req, res, async () => {
+            // Retrieve hashed password from the database
+            const hashedPassword = await login(username);
+            if (!hashedPassword) {
+                return res.status(401).json({ msg: 'Invalid username or password' });
+            }
 
-        // Compare passwords
-        const match = await bcrypt.compare(userPass, hashedPassword);
-        if (match) {
-            // Generate JWT token
-            const token = jwt.sign({ username: username }, process.env.SECRET_KEY, { expiresIn: '1h' });
-            // Set token as cookie
-            res.cookie('jwt', token, { httpOnly: false, expiresIn: '1h' });
-            return res.status(200).json({token:token});
-        } else {
-            return res.status(401).json({ msg: 'Invalid username or password' });
-        }
+            // Compare passwords
+            const match = await bcrypt.compare(userPass, hashedPassword);
+            if (match) {
+                // Generate JWT token
+                const token = jwt.sign({ username: username }, process.env.SECRET_KEY, { expiresIn: '1h' });
+                // Set token as cookie
+                res.cookie('jwt', token, { httpOnly: false, expiresIn: '1h' });
+                return res.status(200).json({token:token});
+            } else {
+                return res.status(401).json({ msg: 'Invalid username or password' });
+            }
+        });
     } catch (error) {
         console.error(error);
         return res.status(500).json({ msg: 'An error occurred' });
