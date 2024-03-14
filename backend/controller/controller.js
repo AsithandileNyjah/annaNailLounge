@@ -1,4 +1,5 @@
 import {addUser, getUsers, getUser, editUser, delUser , addService, getServices, getService, editService, delServ, addBlog, getBlogs, getBlog, editBlog, delBlog, login, addRev, getRevs, getRev, delRev,addComment, getComments, revDisplay, commDisplay, makeApp, getApps, getApp, adminRights} from '../models/database.js'
+import {authMiddleware} from '../middleware/middleware.js'
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 import {pool} from '../config/config.js'
