@@ -51,8 +51,10 @@ router.route('/comments/:commentID').get(commGet);
 router.route('/comments/:commentID').delete(delComm);
 
 // Appointments
-router.route('/appointments').post(appMake);
-router.route('/appointments').get(appsGet);
+router
+    .route('/appointments')
+        .post(appMake)
+        .get(appsGet);
 router.route('/appointments/:appID').get(appGet);
 router.route('/appointments/:users').get(getUserAppointments);
 

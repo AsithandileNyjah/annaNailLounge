@@ -290,12 +290,12 @@ const displayComms = async (req, res) => {
 
 
 const appMake = async (req, res) => {
+    console.log('token:'+req.token);
     try {
-        if (!req.token) {
-            return res.status(401).send({ msg: "Please log in to make an appointment" });
-        }
-        const appointments = await makeApp(req, res);
-        res.status(200).json(appointments);
+        authMiddleware(req, res, async () => {
+            const appointments = await makeApp(req, res);
+            res.status(200).json(appointments);
+        });
     } catch (error) {
         console.error('Error making appointment:', error);
         res.status(500).send('Internal Server Error');
