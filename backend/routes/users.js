@@ -26,11 +26,7 @@ router.route('/blogs/:blogID').patch(blogEdit);
 router.route('/blogs/:blogID').delete(blogDel);
 
 // login
-router.route('/login').post(valFun,(req,res)=>{
-    res.send({
-        msg: "YAY! You have logged in."
-    })
-})
+router.route('/login').post(valFun)
 
 // adminRights
 
