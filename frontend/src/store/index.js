@@ -148,21 +148,19 @@ actions: {
       throw new Error("Failed to update service. Please try again later.");
     }
   },
-  async makeAppointment({ commit }, appData) {
+async makeAppointment({ commit }, appData) {
     try {
-        const response = await axios.post(`${baseURL}/appointments`, {
-          method: 'POST',
-          headers:{
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(appData)
+        const response = await axios.post(`${baseURL}/appointments`, appData, {
+            headers: {
+                'Content-Type': 'application/json'
+            }
         });
-        const appo = await response.json()
         commit('setAppointments', response.data);
     } catch (error) {
         commit('SET_ERROR', error.message);
     }
 },
+
     async fetchBlogs({ commit }) {
     try {
       const response = await axios.get(`${baseURL}/blogs`);
@@ -204,6 +202,7 @@ actions: {
   async checkUser({ commit }, { username, userPass }) {
     try {
       let userData = { username, userPass };
+      console.log(userData);
       let response = await fetch(`${baseURL}/login`, {
         method: 'POST',
         headers: {
@@ -211,7 +210,7 @@ actions: {
         },
         body: JSON.stringify(userData)
       });
-  
+      console.log(response);
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
@@ -220,6 +219,7 @@ actions: {
         $cookies.set('jwt', data.token);
         commit('setLogged', true);
         window.location.reload()
+        
       } else {
         throw new Error('Invalid response from server');
       }
