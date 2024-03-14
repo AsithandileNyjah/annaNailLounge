@@ -155,21 +155,14 @@ const valFun = async (req, res) => {
         if (!userPass || typeof userPass !== 'string') {
             return res.status(400).json({ msg: 'Invalid password' });
         }
-
-        // This middleware will ensure token presence and validity
         validate(req, res, async () => {
-            // Retrieve hashed password from the database
             const hashedPassword = await login(username);
             if (!hashedPassword) {
                 return res.status(401).json({ msg: 'Invalid username or password' });
             }
-
-            // Compare passwords
             const match = await bcrypt.compare(userPass, hashedPassword);
             if (match) {
-                // Generate JWT token
                 const token = jwt.sign({ username: username }, process.env.SECRET_KEY, { expiresIn: '1h' });
-                // Set token as cookie
                 res.cookie('jwt', token, { httpOnly: false, expiresIn: '1h' });
                 return res.status(200).json({token:token});
             } else {
