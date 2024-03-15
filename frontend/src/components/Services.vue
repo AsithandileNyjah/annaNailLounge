@@ -64,7 +64,7 @@
                   </div>
                 </div>
               </td>
-              <td><button type="button" class="btn btn-danger" @click="deleteUser(service.servID)">Delete</button></td>
+              <td><button type="button" class="btn btn-danger" @click="delServ(service.servID)">Delete</button></td>
             </tr>
           </tbody>
         </table>

@@ -25,6 +25,9 @@ mutations: {
   setServices(state, services) {
     state.services = services;
   },
+  deleteService(state, servID) {
+    state.services = state.services.filter(service => service.servID !== servID);
+  },
   setBlogs(state, blogs) {
     state.blogs = blogs;
   },
@@ -104,7 +107,16 @@ actions: {
     }
     window.location.reload()
   },
-  async editUser({ commit }, { userID, updatedUser }) {
+    async deleteService({ commit }, servID) {
+      try {
+        await axios.delete(`${baseURL}/services/${servID}`);
+        commit('deleteService', servID);
+      } catch (error) {
+        console.error('Error deleting service:', error.response.data);
+        throw new Error('Failed to delete service. Please try again later.');
+      }
+    },
+    async editUser({ commit }, { userID, updatedUser }) {
     try {
       const response = await fetch(
         `${baseURL}/users/${userID}`,
