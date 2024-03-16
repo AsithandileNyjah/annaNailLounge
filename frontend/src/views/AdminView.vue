@@ -1,13 +1,14 @@
 <template>
     <div class="container">
         <h1>Users</h1>
+        <h1>Add A User</h1>
+        <AddUser></AddUser>
         <Users></Users>
         <br>
          <h1>Services</h1>
         <Services></Services>
         <br>
-        <h1>Add A User</h1>
-        <AddUser></AddUser>
+
     </div>
 </template>
 

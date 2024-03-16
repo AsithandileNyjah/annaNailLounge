@@ -1,6 +1,6 @@
 <template lang="">
     <div>
-        <h1>Catalog</h1>
+        <h1 style="text-align: center">Catalog</h1>
         <Display/>
     </div>
 </template>
