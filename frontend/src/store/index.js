@@ -1,6 +1,7 @@
 import { createStore } from 'vuex'
 import axios from 'axios'
 const baseURL = 'https://annanaillounge-1.onrender.com'
+axios.defaults.withCredentials = true;
 
 export default createStore({
 state: {
