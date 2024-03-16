@@ -160,19 +160,20 @@ actions: {
       throw new Error("Failed to update service. Please try again later.");
     }
   },
-async makeAppointment({ commit }, appData) {
+  async makeAppointment({ commit }, appData) {
     try {
-        const response = await axios.post(`${baseURL}/appointments`, appData, {
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        });
-        commit('setAppointments', response.data);
+      const token = localStorage.getItem('token');
+      const response = await axios.post(`${baseURL}/appointments`, appData, {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}` 
+        }
+      });
+      commit('setAppointments', response.data);
     } catch (error) {
-        commit('SET_ERROR', error.message);
+      commit('SET_ERROR', error.message);
     }
-},
-
+  },
     async fetchBlogs({ commit }) {
     try {
       const response = await axios.get(`${baseURL}/blogs`);
