@@ -268,15 +268,23 @@ const commDisplay = async(req,res)=>{
 }
 
 const makeApp = async (req, res) => {
-    const { userID, servID, appDate, appTime, addOns } = req.body;
+    const { appDate, appTime, addOns, serviceName } = req.body; // Assuming serviceName is provided in the request body
 
     try {
+        const token = req.cookies.jwt; 
+        const decodedToken = jwt.verify(token, process.env.SECRET_KEY);
+        const userID = decodedToken.userID;
+
+        const [serviceRow] = await pool.query('SELECT servID FROM services WHERE servName = ?', [servName]);
+        if (!serviceRow) {
+            throw new Error('Service not found');
+        }
+        const servID = serviceRow.servID;
         const [appointment] = await pool.query(`
             INSERT INTO appointments 
-            (userID, servID, appDate, appTime, addOns) 
+            (userID, service, appDate, appTime, addOns) 
             VALUES (?, ?, ?, ?, ?)
         `, [userID, servID, appDate, appTime, addOns]);
-
         return appointment;
     } catch (error) {
         throw error;
