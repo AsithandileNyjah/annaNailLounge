@@ -272,7 +272,6 @@ const makeApp = async(req,res)=>{
     INSERT INTO appointments 
     (service, appDate, appTime, addOns) 
     VALUES (?, ?, ?, ?);
-
     `)
         return appointment
 }
