@@ -1,5 +1,6 @@
 import { createStore } from 'vuex'
 import axios from 'axios'
+import services from '../services/services.js'
 const baseURL = 'https://annanaillounge-1.onrender.com'
 
 export default createStore({
@@ -11,6 +12,7 @@ state: {
   comments: [],
   appointments: [],
   error:null,
+  token:null
 },
 getters: {
   isAdmin: state => state.isAdmin
@@ -162,18 +164,18 @@ actions: {
   },
   async makeAppointment({ commit }, appData) {
     try {
-      const token = localStorage.getItem('token');
-      const response = await axios.post(`${baseURL}/appointments`, appData, {
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}` 
-        }
-      });
-      commit('setAppointments', response.data);
+        const token = localStorage.getItem('token');
+        services.setAuthToken(token); // Set the token in the request headers
+        const response = await axios.post(`${baseURL}/appointments`, appData, {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        commit('setAppointments', response.data);
     } catch (error) {
-      commit('SET_ERROR', error.message);
+        commit('SET_ERROR', error.message);
     }
-  },
+},
     async fetchBlogs({ commit }) {
     try {
       const response = await axios.get(`${baseURL}/blogs`);
