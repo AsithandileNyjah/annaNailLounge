@@ -267,14 +267,21 @@ const commDisplay = async(req,res)=>{
     return display
 }
 
-const makeApp = async(req,res)=>{
-    const [appointment] = await pool.query(`
-    INSERT INTO appointments 
-    (service, appDate, appTime, addOns) 
-    VALUES (?, ?, ?, ?);
-    `)
-        return appointment
-}
+const makeApp = async (req, res) => {
+    const { service, appDate, appTime, addOns } = req.body; // Assuming data comes from request body
+
+    try {
+        const [appointment] = await pool.query(`
+            INSERT INTO appointments 
+            (service, appDate, appTime, addOns) 
+            VALUES (?, ?, ?, ?);
+        `, [service, appDate, appTime, addOns]);
+
+        return appointment;
+    } catch (error) {
+        throw error; // Rethrow the error to be caught in the caller function
+    }
+};
 
 const getApps = async(req,res)=>{
     const [appointments] = await pool.query(`
