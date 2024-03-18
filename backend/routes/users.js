@@ -55,7 +55,7 @@ router.route('/comments/:commentID').delete(delComm);
 // Appointments
 router
     .route('/appointments')
-        .post(appMake)
+        .post( authMiddleware, appMake )
         .get(appsGet);
 router.route('/appointments/:appID').get(appGet);
 router.route('/appointments/:users').get(getUserAppointments);
