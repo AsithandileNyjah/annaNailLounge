@@ -273,11 +273,10 @@ const makeApp = async (req, res) => {
         const token = req.cookies.jwt;
         const decodedToken = jwt.verify(token, process.env.SECRET_KEY);
         const userID = decodedToken.userID;
-        const [servID] = await pool.query('SELECT servID FROM services WHERE servName = ?', [service]);
+        const [servID] = await pool.query('SELECT servID FROM services WHERE servName = service', [service]);
         if (!serviceRow) {
             throw new Error('Service not found');
         }
-        const servID = service.servID;
         const [appointment] = await pool.query(`
             INSERT INTO appointments 
             (userID, service, appDate, appTime, addOns) 
