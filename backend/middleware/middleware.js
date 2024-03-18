@@ -21,11 +21,17 @@ const authMiddleware = (req, res, next) => {
         if (!token) {
             return res.status(401).json({ msg: 'Unauthorized: No token provided' });
         }
-        jwt.verify(token, process.env.SECRET_KEY);
-        next();
+        jwt.verify(token, process.env.SECRET_KEY, (err, decoded) => {
+            if (err) {
+                return res.status(401).json({ msg: 'Invalid or expired token. Please login and logout again.' });
+            }
+            next();
+        });
     } catch (error) {
-        return res.status(401).json({ msg: 'Invalid or expired token. Please login and logout again.' });
+        console.error('Error verifying token:', error);
+        res.status(500).json({ msg: 'Internal Server Error' });
     }
 };
+
 
 export { validate, authMiddleware };
