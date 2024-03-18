@@ -86,12 +86,12 @@ methods: {
     async makeAppointment() {
     try {
         await this.$store.dispatch('makeAppointment', {
-        appDate: this.appDate,
-        appTime: this.appTime,
-        addOns: this.addOns,
-        serviceId: this.selectedService
+            appDate: this.appDate,
+            appTime: this.appTime,
+            addOns: this.addOns,
+            serviceId: this.service // Use this.service instead of this.selectedService
         });
-        this.$store.dispatch('fetchServices');
+        await this.fetchServices(); // Await the fetchServices method
         this.$emit('appointment-made');
     } catch (error) {
         console.error('Error making appointment:', error.message);

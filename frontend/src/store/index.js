@@ -1,5 +1,6 @@
 import { createStore } from 'vuex'
 import axios from 'axios'
+import services from '../services/services.js'
 const baseURL = 'https://annanaillounge-1.onrender.com'
 axios.defaults.withCredentials = true;
 
@@ -12,6 +13,7 @@ state: {
   comments: [],
   appointments: [],
   error:null,
+  token:null
 },
 getters: {
   isAdmin: state => state.isAdmin
@@ -25,6 +27,9 @@ mutations: {
   },
   setServices(state, services) {
     state.services = services;
+  },
+  deleteService(state, servID) {
+    state.services = state.services.filter(service => service.servID !== servID);
   },
   setBlogs(state, blogs) {
     state.blogs = blogs;
@@ -105,7 +110,16 @@ actions: {
     }
     window.location.reload()
   },
-  async editUser({ commit }, { userID, updatedUser }) {
+    async deleteService({ commit }, servID) {
+      try {
+        await axios.delete(`${baseURL}/services/${servID}`);
+        commit('deleteService', servID);
+      } catch (error) {
+        console.error('Error deleting service:', error.response.data);
+        throw new Error('Failed to delete service. Please try again later.');
+      }
+    },
+    async editUser({ commit }, { userID, updatedUser }) {
     try {
       const response = await fetch(
         `${baseURL}/users/${userID}`,
@@ -149,8 +163,10 @@ actions: {
       throw new Error("Failed to update service. Please try again later.");
     }
   },
-async makeAppointment({ commit }, appData) {
+  async makeAppointment({ commit }, appData) {
     try {
+        const token = localStorage.getItem('token');
+        services.setAuthToken(token); // Set the token in the request headers
         const response = await axios.post(`${baseURL}/appointments`, appData, {
             headers: {
                 'Content-Type': 'application/json'
@@ -161,7 +177,6 @@ async makeAppointment({ commit }, appData) {
         commit('SET_ERROR', error.message);
     }
 },
-
     async fetchBlogs({ commit }) {
     try {
       const response = await axios.get(`${baseURL}/blogs`);

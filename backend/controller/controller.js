@@ -164,6 +164,7 @@ const valFun = async (req, res) => {
         const match = await bcrypt.compare(userPass, hashedPassword);
         if (match) {
             const token = jwt.sign({ username: username }, process.env.SECRET_KEY, { expiresIn: '1h' });
+            console.log(token); 
             res.cookie('jwt', token, { httpOnly: false, expiresIn: '1h' });
             return res.status(200).json({ token: token });
         } else {
@@ -174,6 +175,7 @@ const valFun = async (req, res) => {
         return res.status(500).json({ msg: 'An error occurred' });
     }
 };
+
 
 
 const isAdmin = async (req, res) => {
@@ -287,13 +289,19 @@ const displayComms = async (req, res) => {
 };
 
 
-const appMake = async (req, res) => {
-    const token = req.headers.authorization;
+const appMake = async (req, res) => 
     try {
-        authMiddleware(req, res, async () => {
-            const appointments = await makeApp(req, res);
-            res.status(200).json(appointments);
-        });
+        const token = req.headers.authorization;
+
+        if (!token) {
+            return res.status(401).json({ msg: 'Unauthorized: No token provided' });
+        }
+
+        const decoded = jwt.verify(token.split(' ')[1], process.env.JWT_SECRET);
+        req.user = decoded.user;
+
+        const appointments = await makeApp(req, res);
+        res.status(200).json(appointments);
     } catch (error) {
         console.error('Error making appointment:', error);
         res.status(500).send('Internal Server Error');

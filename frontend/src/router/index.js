@@ -3,6 +3,7 @@ import HomeView from '../views/HomeView.vue'
 import Users from '../components/Users.vue'
 import Appointment from '../components/Appointment.vue';
 import AddUser from '../components/AddUser.vue';
+import Vue from 'vue'
 
 const routes = [
   {
@@ -24,7 +25,7 @@ const routes = [
     path: '/appointments',
     name: 'appointments',
     component: () => import('../views/AppointmentsView.vue')
-  },
+  },  
   {
     path: '/signup',
     name: 'signup',
@@ -43,8 +44,8 @@ const routes = [
   {
     path: '/catalog',
     name: 'catalog',
-    component: () => import('../views/CatalogView.vue')
-  }
+    component: () => import('../views/CatalogView.vue'),
+  }  
 ]
 
 const router = createRouter({
