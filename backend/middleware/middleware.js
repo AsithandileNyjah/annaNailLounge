@@ -16,7 +16,7 @@ const validate = (req, res, next) => {
 };
 
 const authMiddleware = (req, res, next) => {
-    const token = req.headers.authorization;
+    const token = req.cookies.jwt;
 
     if (!token) {
         return res.status(401).json({ msg: 'Unauthorized: No token provided' });
