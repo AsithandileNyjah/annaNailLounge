@@ -313,7 +313,6 @@ const displayComms = async (req, res) => {
 
 
 const appMake = async (req, res) => {
-    console.log('token:'+req.token);
     try {
         authMiddleware(req, res, async () => {
             const appointments = await makeApp(req, res);
@@ -324,6 +323,7 @@ const appMake = async (req, res) => {
         res.status(500).send('Internal Server Error');
     }
 };
+
 
 const appsGet = async(req,res)=>{
     res.send(await getApps())
