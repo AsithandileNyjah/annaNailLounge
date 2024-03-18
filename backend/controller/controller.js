@@ -152,9 +152,11 @@ const blogDel = async (req,res)=>{
 const valFun = async (req, res) => {
     try {
         const { userPass, username } = req.body;
+
         if (!userPass || typeof userPass !== 'string') {
             return res.status(400).json({ msg: 'Invalid password' });
         }
+
         const hashedPassword = await login(username);
 
         if (!hashedPassword) {
@@ -163,9 +165,13 @@ const valFun = async (req, res) => {
 
         const match = await bcrypt.compare(userPass, hashedPassword);
         if (match) {
-            const token = jwt.sign({ username: username }, process.env.SECRET_KEY, { expiresIn: '1h' });
-            console.log(token); 
+            const jwtPayload = {
+                username: username,
+            };
+            const token = jwt.sign(jwtPayload, process.env.SECRET_KEY, { expiresIn: '1h' });
+            console.log(jwtPayload);
             res.cookie('jwt', token, { httpOnly: false, expiresIn: '1h' });
+
             return res.status(200).json({ token: token });
         } else {
             return res.status(401).json({ msg: 'Invalid username or password' });
@@ -175,7 +181,6 @@ const valFun = async (req, res) => {
         return res.status(500).json({ msg: 'An error occurred' });
     }
 };
-
 
 
 const isAdmin = async (req, res) => {
