@@ -24,7 +24,7 @@ const authMiddleware = (req, res, next) => {
         jwt.verify(token, process.env.SECRET_KEY);
         next();
     } catch (error) {
-        return res.status(401).json({ msg: 'Unauthorized: Invalid token' });
+        return res.status(401).json({ msg: 'Invalid or expired token. Please login and logout again.' });
     }
 };
 
