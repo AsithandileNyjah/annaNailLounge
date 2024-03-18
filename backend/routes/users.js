@@ -2,6 +2,8 @@ import express from 'express';
 
 import {addOne, ediOne, getAll,delOne, getOne, servAdd, getServs, getServ, editServ, servDel, blogAdd, gBlogs, gBlog, blogEdit, blogDel, valFun, isAdmin, revAdd, revsGet, revGet, revDel, commAdd, commsGet, commGet, delComm,  displayRev, displayComms, appMake, appsGet, appGet, getUserAppointments } from '../controller/controller.js';
 
+import {authMiddleware} from '../middleware/middleware.js'
+
 const router = express.Router()
 
 // Users
@@ -53,7 +55,7 @@ router.route('/comments/:commentID').delete(delComm);
 // Appointments
 router
     .route('/appointments')
-        .post(appMake)
+        .post(authMiddleware, appMake)
         .get(appsGet);
 router.route('/appointments/:appID').get(appGet);
 router.route('/appointments/:users').get(getUserAppointments);

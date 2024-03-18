@@ -289,7 +289,7 @@ const displayComms = async (req, res) => {
 };
 
 
-const appMake = async (req, res) => {
+const appMake = async (req, res) => 
     try {
         const token = req.headers.authorization;
 
@@ -307,6 +307,7 @@ const appMake = async (req, res) => {
         res.status(500).send('Internal Server Error');
     }
 };
+
 
 const appsGet = async(req,res)=>{
     res.send(await getApps())
