@@ -277,7 +277,7 @@ const makeApp = async (req, res) => {
         if (!serviceRow) {
             throw new Error('Service not found');
         }
-        const servID = serviceRow.servID;
+        const servID = service.servID;
         const [appointment] = await pool.query(`
             INSERT INTO appointments 
             (userID, service, appDate, appTime, addOns) 
