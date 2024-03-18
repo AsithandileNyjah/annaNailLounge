@@ -274,7 +274,7 @@ const makeApp = async (req, res) => {
         const [appointment] = await pool.query(`
             INSERT INTO appointments 
             (service, appDate, appTime, addOns) 
-            VALUES (?, ?, ?, ?);
+            VALUES (?, ?, ?, ?)
         `, [service, appDate, appTime, addOns]);
 
         return appointment;
