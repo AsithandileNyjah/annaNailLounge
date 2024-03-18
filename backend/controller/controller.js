@@ -6,7 +6,6 @@ import {pool} from '../config/config.js'
 import { config } from 'dotenv'
 config()
 
-
 const addOne = async (req, res) => {
     const { firstName, lastName, emailAdd, username, userPass } = req.body;
 
@@ -37,37 +36,53 @@ const addOne = async (req, res) => {
     console.log('Error in code');
 };
 
-const getAll = async(req,res)=>{
-    res.send(await getUsers())
-}
+const getAll = async (req, res) => {
+    try {
+        const users = await getUsers();
+        res.send(users);
+    } catch (error) {
+        console.error('Error fetching users:', error);
+        res.status(500).send('Internal Server Error');
+    }
+};
 
-const getOne = async(req,res)=>{
-    res.send(await getUser(+req.params.userID))
-}
+const getOne = async (req, res) => {
+    const userID = parseInt(req.params.userID);
+    if (isNaN(userID)) {
+        res.status(400).send('Invalid user ID');
+        return;
+    }
+
+    try {
+        const user = await getUser(userID);
+        res.send(user);
+    } catch (error) {
+        console.error('Error fetching user:', error);
+        res.status(500).send('Internal Server Error');
+    }
+};
 
 const ediOne = async (req, res) => {
+    const { firstName, lastName, emailAdd, username } = req.body;
+    const userID = parseInt(req.params.userID);
+    if (isNaN(userID)) {
+        res.status(400).send('Invalid user ID');
+        return;
+    }
+
     try {
-        const { firstName, lastName, emailAdd, username } = req.body;
-        const userID = +req.params.userID;
-
-        // Update user information
         const result = await editUser(firstName, lastName, emailAdd, username, userID);
-
-        // Check if the update was successful
         if (result.success) {
-            // If successful, fetch and return updated user information
             const updatedUsers = await getUsers();
             res.json(updatedUsers);
         } else {
-            // If update failed, return an error response
             res.status(500).json({ error: result.message });
         }
     } catch (error) {
-        // Handle any unexpected errors
         console.error('Error updating user:', error);
         res.status(500).json({ error: 'Failed to update user' });
     }
-}
+};
 
 const delOne = async (req,res)=>{
     await delUser(+req.params.userID)
@@ -93,21 +108,27 @@ const getServ = async(req,res)=>{
     res.send(await getService(+req.params.servID))
 }
 
-const editServ = async(req,res)=>{
-    const [service] = await getService(+req.params.servID)
-    let { servName, servDesc, servPrice, servPic } = req.body;
-    servName ? servName=servName: {servName}=service.servName
-    servDesc ? servDesc=servDesc: {servDesc}=service.servDesc
-    servPrice ? servPrice=servPrice: {servPrice}=service.servPrice
-    servPic ? servPic=servPic: {servPic}=service.servPic
-    await editService(servName, servDesc, servPrice, servPic, +req.params.servID);
-    res.status(200).json({ 
-        success: true,
-        msg: "Service successfully updated"
-    });     
+const editServ = async (req, res) => {
+    const servID = parseInt(req.params.servID);
+    if (isNaN(servID)) {
+        res.status(400).send('Invalid service ID');
+        return;
+    }
 
-}
-
+    try {
+        const service = await getService(servID);
+        let { servName, servDesc, servPrice, servPic } = req.body;
+        servName = servName ? servName : service.servName;
+        servDesc = servDesc ? servDesc : service.servDesc;
+        servPrice = servPrice ? servPrice : service.servPrice;
+        servPic = servPic ? servPic : service.servPic;
+        await editService(servName, servDesc, servPrice, servPic, servID);
+        res.status(204).end();
+    } catch (error) {
+        console.error('Error editing service:', error);
+        res.status(500).send('Internal Server Error');
+    }
+};
 const servDel = async (req,res)=>{
     await delServ(+req.params.servID)
     res.send(await getServices())
@@ -152,11 +173,9 @@ const blogDel = async (req,res)=>{
 const valFun = async (req, res) => {
     try {
         const { userPass, username } = req.body;
-
         if (!userPass || typeof userPass !== 'string') {
             return res.status(400).json({ msg: 'Invalid password' });
         }
-
         const hashedPassword = await login(username);
 
         if (!hashedPassword) {
@@ -165,19 +184,14 @@ const valFun = async (req, res) => {
 
         const match = await bcrypt.compare(userPass, hashedPassword);
         if (match) {
-            const jwtPayload = {
-                username: username,
-            };
-            const token = jwt.sign(jwtPayload, process.env.SECRET_KEY, { expiresIn: '1h' });
-            console.log(jwtPayload);
+            const token = jwt.sign({ username: username }, process.env.SECRET_KEY, { expiresIn: '1h' });
             res.cookie('jwt', token, { httpOnly: false, expiresIn: '1h' });
-
             return res.status(200).json({ token: token });
         } else {
             return res.status(401).json({ msg: 'Invalid username or password' });
         }
     } catch (error) {
-        console.error(error);
+        console.error('Error authenticating user:', error);
         return res.status(500).json({ msg: 'An error occurred' });
     }
 };
@@ -185,10 +199,14 @@ const valFun = async (req, res) => {
 
 const isAdmin = async (req, res) => {
     const { username } = req.body;
-    res.send(await adminRights(username));
+    try {
+        const result = await adminRights(username);
+        res.json({ result });
+    } catch (error) {
+        console.error('Error checking admin rights:', error);
+        res.status(500).send('Internal Server Error');
+    }
 };
-
-
 
 const revAdd = async (req, res) => {
     try {
@@ -294,25 +312,18 @@ const displayComms = async (req, res) => {
 };
 
 
-const appMake = async (req, res) => 
+const appMake = async (req, res) => {
+    console.log('token:'+req.token);
     try {
-        const token = req.headers.authorization;
-
-        if (!token) {
-            return res.status(401).json({ msg: 'Unauthorized: No token provided' });
-        }
-
-        const decoded = jwt.verify(token.split(' ')[1], process.env.JWT_SECRET);
-        req.user = decoded.user;
-
-        const appointments = await makeApp(req, res);
-        res.status(200).json(appointments);
+        authMiddleware(req, res, async () => {
+            const appointments = await makeApp(req, res);
+            res.status(200).json(appointments);
+        });
     } catch (error) {
         console.error('Error making appointment:', error);
         res.status(500).send('Internal Server Error');
     }
 };
-
 
 const appsGet = async(req,res)=>{
     res.send(await getApps())
@@ -339,6 +350,5 @@ const getUserAppointments = async (req, res) => {
         res.status(500).send('Internal Server Error');
     }
 };
-
 
 export{addOne, getAll, getOne, ediOne,delOne, servAdd, getServs, getServ, editServ, servDel, blogAdd, gBlogs, gBlog, blogEdit, blogDel, valFun, revAdd, revsGet, revGet, revDel, commAdd, commsGet, commGet, delComm, displayRev, displayComms, appMake, appsGet, appGet, getUserAppointments, isAdmin}
