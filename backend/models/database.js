@@ -273,12 +273,12 @@ const makeApp = async (req, res) => {
         const token = req.cookies.jwt;
         const decodedToken = jwt.verify(token, process.env.SECRET_KEY);
         const userID = decodedToken.userID;
-        }
+
         const [appointment] = await pool.query(`
             INSERT INTO appointments 
             (userID, service, appDate, appTime, addOns) 
             VALUES (?, ?, ?, ?, ?)
-        `, [userID, appDate, appTime, addOns]);
+        `, [userID, service, appDate, appTime, addOns]);
 
         return appointment;
     } catch (error) {
