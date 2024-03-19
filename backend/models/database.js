@@ -267,12 +267,12 @@ const commDisplay = async(req,res)=>{
     return display
 }
 
-const makeApp = async(username, service, appDate, appTime, addOns)=>{
+const makeApp = async(req,res)=>{
     const [appointment] = await pool.query(`
     INSERT INTO appointments 
     (username, service, appDate, appTime, addOns) 
     VALUES (?, ?, ?, ?, ?);
-    `,[username, service, appDate, appTime, addOns])
+    `)
         return appointment
 }
 
