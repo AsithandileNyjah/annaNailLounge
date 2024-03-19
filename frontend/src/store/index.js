@@ -1,8 +1,9 @@
 import { createStore } from 'vuex'
 import axios from 'axios'
-import services from '../services/services.js'
-const baseURL = 'https://annanaillounge-1.onrender.com'
-axios.defaults.withCredentials = true;
+
+import jwtDecode from 'jwt-decode'
+
+const baseURL = 'https://annanaillounge.onrender.com'
 
 export default createStore({
 state: {
@@ -13,7 +14,7 @@ state: {
   comments: [],
   appointments: [],
   error:null,
-  token:null
+  token: null
 },
 getters: {
   isAdmin: state => state.isAdmin
@@ -68,9 +69,7 @@ actions: {
                 },
                 body: JSON.stringify(userData)
             });
-
             const data = await response.json();
-
             if (response.ok) {
                 commit('setUser', data);
             } else {
@@ -124,7 +123,7 @@ actions: {
       const response = await fetch(
         `${baseURL}/users/${userID}`,
         {
-          method: "PATCH", // Assuming PATCH method is used for partial updates
+          method: "PATCH",
           headers: {
             "Content-Type": "application/json",
           },
@@ -134,7 +133,6 @@ actions: {
       if (!response.ok) {
         throw new Error("Failed to update user");
       }
-      
       commit("updateUser", updatedUser);
     } catch (error) {
       console.error("Error updating user:", error);
@@ -146,7 +144,7 @@ actions: {
       const response = await fetch(
         `${baseURL}/services/${servID}`,
         {
-          method: "PATCH", // Assuming PATCH method is used for partial updates
+          method: "PATCH", 
           headers: {
             "Content-Type": "application/json",
           },
@@ -156,27 +154,47 @@ actions: {
       if (!response.ok) {
         throw new Error("Failed to update service");
       }
-      
       commit("updatedService", updatedUser);
     } catch (error) {
       console.error("Error updating service:", error);
       throw new Error("Failed to update service. Please try again later.");
     }
   },
-  async makeAppointment({ commit }, appData) {
+  async makeAppointment({ commit }, { appDate, appTime, addOns, service }) {
     try {
-        const token = localStorage.getItem('token');
-        services.setAuthToken(token); // Set the token in the request headers
-        const response = await axios.post(`${baseURL}/appointments`, appData, {
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        });
-        commit('setAppointments', response.data);
+      const token = $cookies.get('jwt');
+      console.log('Token:', token);
+      if (!token) {
+        throw new Error('No token found');
+      }
+      const decodedToken = jwtDecode(token);
+      const username = decodedToken.username;
+      console.log('Username:', username)
+      const appData = { appDate, appTime, addOns, service, username };
+      console.log('App Data:', appData);
+      const response = await axios.post(`${baseURL}/appointments`, appData, {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `${token}`
+        }
+      });
+      commit('setAppointments', response.data);
     } catch (error) {
-        commit('SET_ERROR', error.message);
+      console.error('Error making appointment:', error);
+      commit('SET_ERROR', error.message);
     }
-},
+  },    
+  async fetchBlogs({ commit }) {
+    try {
+      const response = await axios.get(`${baseURL}/blogs`);
+      console.log(response);
+      commit('setBlogs', response.data);
+      console.log(response.data);
+    } catch (error) {
+      console.error('Error fetching blogs:', error.response.data);
+      throw new Error('Failed to fetch blogs. Please try again later.');
+    }
+  },
     async fetchBlogs({ commit }) {
     try {
       const response = await axios.get(`${baseURL}/blogs`);
@@ -218,7 +236,6 @@ actions: {
   async checkUser({ commit }, { username, userPass }) {
     try {
       let userData = { username, userPass };
-      console.log(userData);
       let response = await fetch(`${baseURL}/login`, {
         method: 'POST',
         headers: {
@@ -226,7 +243,6 @@ actions: {
         },
         body: JSON.stringify(userData)
       });
-      console.log(response);
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
@@ -235,16 +251,14 @@ actions: {
         $cookies.set('jwt', data.token);
         commit('setLogged', true);
         window.location.reload()
-        
       } else {
         throw new Error('Invalid response from server');
       }
     } catch (error) {
       console.error('Login failed:', error);
       throw new Error('Login failed');
-    }    
+    }
   }
-    
     },
 modules: {
 }
