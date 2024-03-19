@@ -267,13 +267,21 @@ const commDisplay = async(req,res)=>{
     return display
 }
 
-const makeApp = async(req,res)=>{
-    const [appointment] = await pool.query(`
-    INSERT INTO appointments 
-    ( service, appDate, appTime, addOns) 
-    VALUES ( ?, ?, ?, ?);
-    `)
-        return appointment
+const makeApp = async (req, res) => {
+    const { service, appDate, appTime, addOns } = req.body;
+    const { username } = req; // Assuming the username is decoded and available in the request object
+
+    try {
+        const [appointment] = await pool.query(`
+            INSERT INTO appointments (service, appDate, appTime, addOns, username) 
+            VALUES (?, ?, ?, ?, ?);
+        `, [service, appDate, appTime, addOns, username]);
+
+        return appointment;
+    } catch (error) {
+        console.error('Error making appointment:', error);
+        throw error; // Rethrow the error to be caught by the calling function or middleware
+    }
 }
 
 
