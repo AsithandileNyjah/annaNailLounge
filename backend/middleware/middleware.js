@@ -25,6 +25,8 @@ const authMiddleware = (req, res, next) => {
             if (err) {
                 return res.status(401).json({ msg: 'Invalid or expired token. Please login and logout again.' });
             }
+            // Attach the decoded username to the request object
+            req.username = decoded.username;
             next();
         });
     } catch (error) {
