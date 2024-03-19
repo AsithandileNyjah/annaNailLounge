@@ -1,5 +1,5 @@
 import {addUser, getUsers, getUser, editUser, delUser , addService, getServices, getService, editService, delServ, addBlog, getBlogs, getBlog, editBlog, delBlog, login, addRev, getRevs, getRev, delRev,addComment, getComments, revDisplay, commDisplay, makeApp, getApps, getApp, adminRights} from '../models/database.js'
-import {authMiddleware, validate} from '../middleware/middleware.js'
+import {authMiddleware } from '../middleware/middleware.js'
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 import {pool} from '../config/config.js'
@@ -313,14 +313,10 @@ const displayComms = async (req, res) => {
 
 
 const appMake = async (req, res) => {
-    try {
-        const appointments = await makeApp(req, res);
-        res.status(200).json(appointments);
-    } catch (error) {
-        console.error('Error making appointment:', error);
-        res.status(500).send('Internal Server Error');
-    }
+    await makeApp(req, res);
+        res.status(200).json(appointments)
 };
+
 
 const appsGet = async(req,res)=>{
     res.send(await getApps())
