@@ -267,20 +267,14 @@ const commDisplay = async(req,res)=>{
     return display
 }
 
-const makeApp = async (req, res) => {
-    const { appDate, appTime, addOns, service } = req.body;
-    const token = req.cookies.jwt;
-    const decodedToken = jwt.verify(token, process.env.SECRET_KEY);
-    const userID = decodedToken.userID;
-
+const makeApp = async(username, service, appDate, appTime, addOns)=>{
     const [appointment] = await pool.query(`
-        INSERT INTO appointments 
-        (userID, service, appDate, appTime, addOns) 
-        VALUES (?, ?, ?, ?, ?)
-    `, [userID, service, appDate, appTime, addOns]);
-
-    return appointment;
-};
+    INSERT INTO appointments 
+    (username, service, appDate, appTime, addOns) 
+    VALUES (?, ?, ?, ?, ?);
+    `,[username, service, appDate, appTime, addOns])
+        return appointment
+}
 
 
 const getApps = async(req,res)=>{
