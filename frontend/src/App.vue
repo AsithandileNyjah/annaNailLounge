@@ -14,11 +14,10 @@ Navabar {
 <script>
 import Navabar from './components/Navabar.vue';
 import Footer from './components/Footer.vue';
-
 export default {
   components: {
     Navabar,
-    Footer
+    Footer,
   }
 }
 </script>

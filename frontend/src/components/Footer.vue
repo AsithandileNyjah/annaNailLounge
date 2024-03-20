@@ -14,7 +14,7 @@
             <a href="#"><font-awesome-icon icon="twitter" /></a>
             <a href="#"><font-awesome-icon icon="facebook" /></a>
             <a href="#"><font-awesome-icon icon="instagram" /></a>
-            <a href="#"><font-awesome-icon icon="twitter" /></a>
+            <a href="#"><font-awesome-icon icon="whatsapp" /></a>
         </div>
         </div>
     </div>
@@ -47,20 +47,19 @@ margin-right: 10px;
 }
 
 .social-icons a:hover {
-color: #55acee; /* Twitter */
+color: #55acee;
 }
 
 .social-icons a:hover {
-color: #3f729b; /* Facebook */
+color: #3f729b; 
 }
 
 .social-icons a:hover {
-color: #e4405f; /* Instagram */
+color: #e4405f;
 }
 
 .social-icons a:hover {
-color: #25d366; /* WhatsApp */
+color: #25d366; 
 }
 </style>
-  
   
