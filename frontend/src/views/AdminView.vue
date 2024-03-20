@@ -27,5 +27,4 @@ export default {
 </script>
 
 <style scoped>
-/* Component-specific styles go here */
 </style>

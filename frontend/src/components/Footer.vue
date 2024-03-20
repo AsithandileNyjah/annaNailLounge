@@ -4,17 +4,17 @@
     <div class="row">
         <div class="col-md-6">
         <h4>Contact Information</h4>
-        <p>Email: example@example.com</p>
-        <p>Phone: +1234567890</p>
-        <p>Address: 1234 Main Street, City, Country</p>
+        <p>Email: info@annanaillounge.com</p>
+        <p>Phone: +27 899 3523</p>
+        <p>Address: 314 Imam Haron Road, Lansdowne, 7081</p>
         </div>
         <div class="col-md-6">
         <h4>Connect with Us</h4>
         <div class="social-icons">
-            <a href="#"><i class="fab fa-twitter"></i></a>
-            <a href="#"><i class="fab fa-instagram"></i></a>
-            <a href="#"><i class="fab fa-facebook"></i></a>
-            <a href="#"><i class="fab fa-whatsapp"></i></a>
+            <a href="#"><font-awesome-icon icon="twitter" /></a>
+            <a href="#"><font-awesome-icon icon="facebook" /></a>
+            <a href="#"><font-awesome-icon icon="instagram" /></a>
+            <a href="#"><font-awesome-icon icon="twitter" /></a>
         </div>
         </div>
     </div>
@@ -23,12 +23,14 @@
 </template>
 
 <script>
-export default {
-name: 'Footer'
-};
+export default ({
+components: {
+
+}
+});
 </script>
 
-<style scoped>
+<style>
 .footer {
 background-color: #333;
 color: #fff;
@@ -45,19 +47,20 @@ margin-right: 10px;
 }
 
 .social-icons a:hover {
-color: #55acee; 
+color: #55acee; /* Twitter */
 }
 
 .social-icons a:hover {
-color: #3f729b; 
+color: #3f729b; /* Facebook */
 }
 
 .social-icons a:hover {
-color: #e4405f; 
+color: #e4405f; /* Instagram */
 }
 
 .social-icons a:hover {
-color: #25d366;
+color: #25d366; /* WhatsApp */
 }
 </style>
+  
   

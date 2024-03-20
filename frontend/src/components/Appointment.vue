@@ -99,7 +99,7 @@
     }
   };
   </script>
-<style>
+<style scoped>
 .card-img-top{
     height: 200px;
 }
