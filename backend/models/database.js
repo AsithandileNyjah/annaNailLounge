@@ -139,15 +139,16 @@ const getBlog = async (blogID)=>{
     return blog
 }
 
-const editBlog = async (blogTitle, blogAuthor, blog, blogCover, blogID) => {
+const editBlog = async (blogTitle, blogAuthor, blog, intro, blogCover, blogID) => {
     const [edit] = await pool.query(`
     UPDATE blogs SET 
     blogTitle = ?,  
     blogAuthor = ?, 
     blog = ?, 
+    intro = ?,
     blogCover = ? 
     WHERE blogID = ?;    
-    `, [blogTitle, blogAuthor, blog, blogCover, blogID]);
+    `, [blogTitle, blogAuthor, blog, intro, blogCover, blogID]);
     return edit
 };
 
