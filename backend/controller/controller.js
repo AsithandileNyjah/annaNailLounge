@@ -90,13 +90,19 @@ const delOne = async (req,res)=>{
 }
 
 
-const servAdd = async(req,res)=>{
-    const{servName, servDesc, servPrice, servPic} = req.body
-    console.log(req.body);
-    await addService(servName, servDesc, servPrice, servPic)
-    res.send({
-        msg:"You have added a service"
-    })
+const servAdd = async (req, res) => {
+    try {
+        const { servName, servDesc, servPrice, servPic } = JSON.parse(req.body);
+        await addService(servName, servDesc, servPrice, servPic);
+        res.send({
+            msg: "You have added a service"
+        });
+    } catch (error) {
+        console.error('Error creating service:', error);
+        res.status(500).send({
+            error: 'An error occurred while creating the service.'
+        });
+    }
 }
 
 const getServs = async (req, res) => {
@@ -135,7 +141,7 @@ const servDel = async (req,res)=>{
 }
 
 const blogAdd = async(req,res)=>{
-    const{blogTitle, blogAuthor, blog, blogCover} = req.body
+    const{blogTitle, blogAuthor, intro,blog, blogCover} = req.body
     console.log(req.body);
     await addBlog(blogTitle, blogAuthor, blog, blogCover)
     res.send({
