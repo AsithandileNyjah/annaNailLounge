@@ -141,9 +141,9 @@ const servDel = async (req,res)=>{
 }
 
 const blogAdd = async(req,res)=>{
-    const{blogTitle, blogAuthor, intro,blog, blogCover} = req.body
+    const{blogTitle, blogAuthor, intro, blog, blogCover} = req.body
     console.log(req.body);
-    await addBlog(blogTitle, blogAuthor, blog, blogCover)
+    await addBlog(blogTitle, blogAuthor, intro, blog, blogCover)
     res.send({
         msg:"You have added a blog"
     })
