@@ -159,9 +159,10 @@ const gBlog = async(req,res)=>{
 
 const blogEdit = async (req, res) => {
     const [editedBlog] = await getBlog(+req.params.blogID);
-    let { blogTitle, blogAuthor, blog, blogCover } = req.body;
+    let { blogTitle, blogAuthor, intro, blog, blogCover } = req.body;
     blogTitle = blogTitle ? blogTitle : editedBlog.blogTitle;
     blogAuthor = blogAuthor ? blogAuthor : editedBlog.blogAuthor;
+    intro = intro? intro : editedIntro.intro
     blog = blog ? blog : editedBlog.blog;
     blogCover = blogCover ? blogCover : editedBlog.blogCover;
     await editBlog(blogTitle, blogAuthor, blog, blogCover, +req.params.blogID);
