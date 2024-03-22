@@ -216,28 +216,14 @@ const isAdmin = async (req, res) => {
 };
 
 const revAdd = async (req, res) => {
+    const { content, username } = req.body;
+
     try {
-        const { content } = req.body;
-        const token = req.cookies.jwt;
-
-        if (!token) {
-            return res.status(401).send({ msg: "Unauthorized. Please log in." });
-        }
-
-        jwt.verify(token, process.env.SECRET_KEY, async (err, decoded) => {
-            if (err) {
-                return res.status(403).send({ msg: "Forbidden. Invalid token." });
-            }
-
-            const username = decoded.username;
-            await addRev(content, username); 
-            res.status(200).send({ msg: "Review added successfully." });
-        });
+        await addRev(content, username);
+        res.status(200).send({ msg: "Review added successfully." });
     } catch (error) {
-        console.error(error);
-        res.status(500).send({
-            msg: "An error occurred"
-        });
+        console.error("Error adding review:", error);
+        res.status(500).send({ error: "An error occurred while adding the review." });
     }
 };
 
@@ -255,30 +241,14 @@ const revDel = async (req,res)=>{
 }
 
 const commAdd = async (req, res) => {
+    const { comment, username } = req.body;
+
     try {
-        const { comment } = req.body;
-        const token = req.cookies.jwt;
-
-        if (!token) {
-            return res.status(401).send({ msg: "Unauthorized. Please log in." });
-        }
-
-        jwt.verify(token, process.env.SECRET_KEY, async (err, decoded) => {
-            if (err) {
-                return res.status(403).send({ msg: "Forbidden. Invalid token." });
-            }
-
-            const username = decoded.username;
-
-            // Proceed to add comment with the associated username
-            await addComment(comment);
-            res.status(200).send({ msg: "Comment added successfully." });
-        });
+        await addComment(comment);
+        res.status(200).send({ msg: "Comment added successfully." });
     } catch (error) {
-        console.error(error);
-        res.status(500).send({
-            msg: "An error occurred"
-        });
+        console.error("Error adding comment:", error);
+        res.status(500).send({ error: "An error occurred while adding the comment." });
     }
 };
 
