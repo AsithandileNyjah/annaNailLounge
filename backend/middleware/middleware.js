@@ -3,7 +3,7 @@ import { config } from 'dotenv'
 config()
 
 const authMiddleware = (req, res, next) => {
-    const token = req.cookies.jwt;
+    const token = req.headers.authorization;
 
     if (token) {
         try {
@@ -16,6 +16,5 @@ const authMiddleware = (req, res, next) => {
 
     next();
 };
-
 
 export { authMiddleware };
