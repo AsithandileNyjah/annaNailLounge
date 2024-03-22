@@ -292,8 +292,7 @@ const displayComms = async (req, res) => {
 
 const appMake = async (req, res) => {
     try {
-        const username = req.username;
-        const appointments = await makeApp(username);
+        const appointments = await makeApp();
         res.status(200).json(appointments);
     } catch (error) {
         console.error('Error making appointment:', error);
