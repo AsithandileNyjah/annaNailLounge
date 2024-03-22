@@ -183,36 +183,23 @@ const valFun = async (req, res) => {
         if (!userPass || typeof userPass !== 'string') {
             return res.status(400).json({ msg: 'Invalid password' });
         }
+        const hashedPassword = await login(username, userPass);
 
-        // Attempt to authenticate user
-        const user = await login(username, userPass);
-
-        if (!user) {
+        if (!hashedPassword) {
             return res.status(401).json({ msg: 'Invalid username or password' });
         }
 
-        // Extract the hashed password from the user object
-        const hashedPassword = user.userPass;
-
-        // Compare provided password with hashed password
         const match = await bcrypt.compare(userPass, hashedPassword);
         if (match) {
-            const token = jwt.sign({ username: username, userRole: user.userRole, userID: user.userID }, process.env.SECRET_KEY, { expiresIn: '1h' });
-            
+            const token = jwt.sign({ username: username }, process.env.SECRET_KEY, { expiresIn: '1h' });
             res.cookie('jwt', token, { httpOnly: false, expiresIn: '1h' });
-            commit('setLogged', true);
-            await router.push('/');
-            
-            // Respond with token
             return res.status(200).json({ token: token });
         } else {
             return res.status(401).json({ msg: 'Invalid username or password' });
         }
     } catch (error) {
-        console.error('Error in valFun:', error);
-        
-        // Respond with a generic error message
-        return res.status(500).json({ msg: 'An error occurred during authentication' });
+        console.error('Error authenticating user:', error);
+        return res.status(500).json({ msg: 'An error occurred' });
     }
 };
 
