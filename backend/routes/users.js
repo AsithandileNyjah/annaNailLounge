@@ -39,14 +39,14 @@ router.route('/login').post(valFun,(req,res)=>{
 router.route('/login').get(isAdmin)
 
 // Reviews
-router.route('/reviews').post(revAdd);
+router.route('/reviews').post(authMiddleware, revAdd);
 router.route('/reviews').get(revsGet);
 router.route('/reviews/:display').get(displayRev);
 router.route('/reviews/:revID').get(revGet);
 router.route('/reviews/:revID').delete(revDel);
 
 // comments
-router.route('/comments').post(commAdd);
+router.route('/comments').post(authMiddleware, commAdd);
 router.route('/comments').get(commsGet);
 router.route('/comments/:display').get(displayComms);
 router.route('/comments/:commentID').get(commGet);
