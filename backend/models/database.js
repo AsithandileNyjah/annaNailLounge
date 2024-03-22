@@ -269,18 +269,11 @@ const commDisplay = async(req,res)=>{
 }
 
 const makeApp = async (req, res) => {
-    const { service, appDate, appTime, addOns } = req.body;
-    try {
         const [appointment] = await pool.query(`
             INSERT INTO appointments (username, service, appDate, appTime, addOns) 
             VALUES (?, ?, ?, ?, ?);
         `, [username, service, appDate, appTime, addOns]);
-
         return appointment;
-    } catch (error) {
-        console.error('Error making appointment:', error);
-        throw error; // Rethrow the error to be caught by the calling function or middleware
-    }
 }
 
 
