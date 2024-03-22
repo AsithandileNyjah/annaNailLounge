@@ -183,11 +183,14 @@ const valFun = async (req, res) => {
         if (!userPass || typeof userPass !== 'string') {
             return res.status(400).json({ msg: 'Invalid password' });
         }
-        const hashedPassword = await login(username);
+        const user = await login(username, userPass);
 
-        if (!hashedPassword) {
+        if (!user) {
             return res.status(401).json({ msg: 'Invalid username or password' });
         }
+
+        // Extract the hashed password from the user object
+        const hashedPassword = user.userPass;
 
         const match = await bcrypt.compare(userPass, hashedPassword);
         if (match) {
@@ -202,6 +205,7 @@ const valFun = async (req, res) => {
         return res.status(500).json({ msg: 'An error occurred' });
     }
 };
+
 
 
 const isAdmin = async (req, res) => {
