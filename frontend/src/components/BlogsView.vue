@@ -16,7 +16,7 @@
         <td>{{ blog.intro }}</td>
         <td>
         <!-- Button trigger modal -->
-        <button type="button" class="btn btn-primary" data-bs-toggle="modal" :data-bs-target="'#editModal-' + blog.blogID">
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" :data-bs-target="'#editModal-' + blog.blogID"  v-for="blog in blogs" :key="blog.blogID">
             Edit
         </button>
 
@@ -29,7 +29,6 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                <!-- Form for editing blog -->
                 <div class="mb-3">
                     <label for="blogTitle" class="form-label">Title</label>
                     <input type="text" class="form-control" id="blogTitle" v-model="updatedBlog.blogTitle">
@@ -41,6 +40,10 @@
                 <div class="mb-3">
                     <label for="intro" class="form-label">Introduction</label>
                     <textarea class="form-control" id="intro" rows="3" v-model="updatedBlog.intro"></textarea>
+                </div>
+                <div class="mb-3">
+                    <label for="intro" class="form-label">Blog</label>
+                    <textarea class="form-control" id="intro" rows="3" v-model="updatedBlog.blog"></textarea>
                 </div>
                 </div>
                 <div class="modal-footer">
@@ -76,7 +79,8 @@ return {
     updatedBlog: {
     blogTitle: null,
     blogAuthor: null,
-    intro: null
+    intro: null,
+    blog:null
     }
 };
 },
@@ -108,8 +112,6 @@ async saveChanges(blogID) {
         text: 'Blog successfully updated',
         timer: 1500
     });
-    // Optionally, you can close the modal here
-    // $(`#editModal-${blogID}`).modal('hide');
     } catch (error) {
     console.error('Error editing blog:', error.message);
     await Swal.fire({

@@ -64,7 +64,7 @@ margin-bottom: 30px;
 .btn-appointments {
 display: inline-block;
 padding: 10px 20px;
-background-color: #ff0000;
+background-color: rgb(252, 142, 160);
 color: #fff;
 text-decoration: none;
 border-radius: 5px;

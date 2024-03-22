@@ -1,5 +1,6 @@
 <template>
     <div>
+        <h1>Sign Up</h1>
         <div v-if="loading" class="spinner-grow" role="status">
             <span class="visually-hidden">Loading...</span>
         </div>

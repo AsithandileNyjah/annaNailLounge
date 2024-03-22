@@ -11,10 +11,13 @@
         <div class="col-md-6">
         <h4>Connect with Us</h4>
         <div class="social-icons">
-            <a href="#"><font-awesome-icon icon="twitter" /></a>
-            <a href="#"><font-awesome-icon icon="facebook" /></a>
-            <a href="#"><font-awesome-icon icon="instagram" /></a>
-            <a href="#"><font-awesome-icon icon="whatsapp" /></a>
+            <i class="fa-brands fa-facebook-f"></i> Anna Nail Lounge
+            <br>
+            <i class="fa-brands fa-instagram"></i> Anna_Nails
+            <br>
+            <i class="fa-brands fa-twitter"></i> Anna_Nails
+            <br> 
+            <i class="fa-brands fa-whatsapp" href=""></i> 081 899 3523
         </div>
         </div>
     </div>

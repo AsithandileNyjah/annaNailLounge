@@ -57,6 +57,10 @@
                         <label for="username" class="form-label">Username</label>
                         <input type="text" class="form-control" id="username" v-model="updatedUser.username">
                       </div>
+                      <div class="mb-3">
+                        <label for="userRole" class="form-label">User Role</label>
+                        <input type="text" class="form-control" id="userRole" v-model="updatedUser.userRole">
+                      </div>
                     </div>
                     <div class="modal-footer">
                       <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -86,7 +90,8 @@ export default {
         firstName: null,
         lastName: null,
         emailAdd: null,
-        username: null
+        username: null,
+        userRole: null
       }
     };
   },

@@ -1,6 +1,5 @@
 <template lang="">
     <div class="form">
-        <h1>Sign Up</h1>
         <AddUser></AddUser>
     </div>
 </template>
