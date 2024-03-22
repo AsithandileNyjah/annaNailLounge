@@ -32,6 +32,9 @@
               <li class="nav-item">
                 <router-link to="/blogs" class="nav-link bg-dark">Blogs</router-link>
               </li>
+              <li class="nav-item">
+                <router-link to="/contact" class="nav-link bg-dark">Contact Us</router-link>
+              </li>
             </ul>
           </div>
         </div>

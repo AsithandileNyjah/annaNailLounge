@@ -16,6 +16,8 @@
 </template>
 
 <script>
+import Swal from 'sweetalert2';
+
 export default {
     name: 'Signin',
     data() {
@@ -26,17 +28,23 @@ export default {
     },
     methods: {
         async checkUser() {
+            // Validate form fields
+            if (!this.username || !this.userPass) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Please fill in both username and password'
+                });
+                return;
+            }
+
             try {
                 await this.$store.dispatch('checkUser', { username: this.username, userPass: this.userPass });
             } catch (error) {
                 console.error('Login failed:', error.message);
-                // Handle the error as needed
             }
         }
     }
 }
 </script>
 
-
-<style>
-</style>

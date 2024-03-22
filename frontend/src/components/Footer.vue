@@ -62,4 +62,3 @@ color: #e4405f;
 color: #25d366; 
 }
 </style>
-  

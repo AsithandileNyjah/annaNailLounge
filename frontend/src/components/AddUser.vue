@@ -29,8 +29,9 @@
     </div>
 </template>
 
-
 <script>
+import Swal from 'sweetalert2';
+
 export default {
     name: 'AddUser',
     data() {
@@ -47,14 +48,33 @@ export default {
     },
     methods: {
         async registerUser() {
+            // Validate form fields
+            if (!this.user.firstName || !this.user.lastName || !this.user.emailAdd || !this.user.username || !this.user.userPass) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Please fill in all fields'
+                });
+                return;
+            }
+
             try {
-                this.loading = true; // Set loading state to true before dispatching action
+                this.loading = true;
                 await this.$store.dispatch('addUser', this.user);
-                console.log('User created successfully');
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Success',
+                    text: 'User created successfully'
+                });
             } catch (error) {
                 console.error('Error registering user:', error);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Failed to register user. Please try again later.'
+                });
             } finally {
-                this.loading = false; // Reset loading state after action completes
+                this.loading = false; 
             }
         }
     }

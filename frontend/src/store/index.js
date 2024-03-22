@@ -10,6 +10,7 @@ state: {
   users: [],
   services: [],
   blogs: [],
+  blog:[],
   reviews: [],
   comments: [],
   appointments: [],
@@ -34,6 +35,9 @@ mutations: {
   },
   setBlogs(state, blogs) {
     state.blogs = blogs;
+  },
+  setBlog(state, blog) {
+    state.blog = blog;
   },
   setReviews(state, reviews) {
     state.reviews = reviews;
@@ -81,6 +85,26 @@ actions: {
         }
         console.log(userData);
           },
+          async addService({ commit }, serviceData) {
+            try {
+              const response = await fetch(`${baseURL}/services`, {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(serviceData)
+              });
+              const data = await response.json();
+              if (response.ok) {
+                commit('setService', data);
+              } else {
+                commit('setError', data.error);
+              }
+            } catch (error) {
+              console.error('Error creating service:', error);
+              commit('setError', 'An error occurred while creating the service.');
+            }
+          },          
   async fetchUsers({ commit }) {
     try {
       const response = await axios.get(`${baseURL}/users`);
@@ -195,17 +219,61 @@ actions: {
       throw new Error('Failed to fetch blogs. Please try again later.');
     }
   },
-    async fetchBlogs({ commit }) {
+  async fetchBlog(blogID) {
     try {
-      const response = await axios.get(`${baseURL}/blogs`);
+      const response = await axios.get(`${baseURL}/blogs/${blogID}`);
       console.log(response);
-      commit('setBlogs', response.data);
-      console.log(response.data);
+      if (response && response.data) {
+        this.$store.commit('setBlogs', response.data);
+        console.log(response.data);
+      } else {
+        throw new Error('Failed to fetch blog data.');
+      }
     } catch (error) {
-      console.error('Error fetching blogs:', error.response.data);
-      throw new Error('Failed to fetch blogs. Please try again later.');
+      console.error('Error fetching blog:', error);
+      throw new Error('Failed to fetch blog. Please try again later.');
     }
-  },
+  }, 
+    async createBlog({ commit }, blogData) {
+      try {
+        const response = await axios.post(`${baseURL}/blogs`, blogData);
+  
+        if (response.status === 200) {
+          this.showSuccessAlert('Blog created successfully.');
+        } else {
+          this.showErrorAlert('Failed to create blog. Please try again later.');
+        }
+      } catch (error) {
+        console.error('Error creating blog:', error);
+        
+        this.showErrorAlert('An error occurred while creating the blog.');
+      } 
+    },
+    async editBlog({ commit }, payload) {
+      try {
+        const { blogID, blogTitle, blogAuthor, intro, blog, blogCover } = payload;
+        const editedBlog = await getBlog(blogID);
+        const updatedBlogTitle = blogTitle ? blogTitle : editedBlog.blogTitle;
+        const updatedBlogAuthor = blogAuthor ? blogAuthor : editedBlog.blogAuthor;
+        const updatedIntro = intro ? intro : editedBlog.intro;
+        const updatedBlog = blog ? blog : editedBlog.blog;
+        const updatedBlogCover = blogCover ? blogCover : editedBlog.blogCover;
+        await editBlog(updatedBlogTitle, updatedBlogAuthor, updatedIntro, updatedBlog, updatedBlogCover, blogID);
+  
+        commit('UPDATE_BLOG', {
+          id: blogID,
+          blogTitle: updatedBlogTitle,
+          blogAuthor: updatedBlogAuthor,
+          intro: updatedIntro,
+          blog: updatedBlog,
+          blogCover: updatedBlogCover
+        });
+        return { success: true, msg: "Blog successfully updated" };
+      } catch (error) {
+        console.error("Error editing blog:", error);
+        return { success: false, msg: "Failed to update blog" };
+      }
+    },
   async fetchReviews({ commit }) {
     try {
       const response = await axios.get(`${baseURL}/reviews`);
@@ -215,15 +283,15 @@ actions: {
       throw new Error('Failed to fetch reviews. Please try again later.');
     }
   },
-  async fetchComments({ commit }) {
+  async fetchComments() {
     try {
       const response = await axios.get(`${baseURL}/comments`);
-      commit('setComments', response.data);
+      this.$store.commit('setComments', response.data);
     } catch (error) {
-      console.error('Error fetching comments:', error.response.data);
+      console.error('Error fetching comments:', error);
       throw new Error('Failed to fetch comments. Please try again later.');
     }
-  },
+  },  
   async fetchAppointments({ commit }) {
     try {
       const response = await axios.get(`${baseURL}/appointments`);

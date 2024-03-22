@@ -45,7 +45,17 @@ const routes = [
     path: '/catalog',
     name: 'catalog',
     component: () => import('../views/CatalogView.vue'),
-  }  
+  },
+  {
+    path: '/blogview/blogID',
+    name: 'blogview',
+    component: () => import('../views/BlogView.vue'),
+  },
+  {
+    path: '/contact',
+    name: 'contact',
+    component: () => import('../views/ContactUs.vue'),
+  } 
 ]
 
 const router = createRouter({

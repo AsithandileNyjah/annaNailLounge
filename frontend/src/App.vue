@@ -1,6 +1,7 @@
 <template>
   <div>
     <Navabar></Navabar>
+    
     <Footer></Footer>
   </div>
 </template>

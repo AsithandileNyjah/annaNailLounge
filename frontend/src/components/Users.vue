@@ -1,139 +1,165 @@
 <template>
-    <div>
-      <div v-if="loading" class="spinner-grow" role="status">
+  <div>
+    <div v-if="loading" class="spinner-grow" role="status">
       <span class="visually-hidden">Loading...</span>
-      </div>
-      <div v-else>
-        <table>
-          <thead>
-            <tr>
-              <th>User ID</th>
-              <th>First Name</th>
-              <th>Last Name</th>
-              <th>Email Address</th>
-              <th>Username</th>
-              <th>User Role</th>
-              <th>Edit</th>
-              <th>Delete</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="user in users" :key="user.userID">
-              <td>{{ user.userID }}</td>
-              <td>{{ user.firstName }}</td>
-              <td>{{ user.lastName }}</td>
-              <td>{{ user.emailAdd }}</td>
-              <td>{{ user.username }}</td>
-              <td>{{ user.userRole }}</td>
-              <td>
-                <!-- Button trigger modal -->
-                <button type="button" class="btn btn-primary" data-bs-toggle="modal" :data-bs-target="'#editModal-' + user.userID" @click="editUser(user)">
-                  Edit
-                </button>
-  
-                <!-- Modal -->
-                <div class="modal fade" :id="'editModal-' + user.userID" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" ref="editModal-{{ user.userID }}">
-                  <div class="modal-dialog">
-                    <div class="modal-content">
-                      <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Edit User</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    </div>
+    <div v-else>
+      <table>
+        <thead>
+          <tr>
+            <th>User ID</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Email Address</th>
+            <th>Username</th>
+            <th>User Role</th>
+            <th>Edit</th>
+            <th>Delete</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="user in users" :key="user.userID">
+            <td>{{ user.userID }}</td>
+            <td>{{ user.firstName }}</td>
+            <td>{{ user.lastName }}</td>
+            <td>{{ user.emailAdd }}</td>
+            <td>{{ user.username }}</td>
+            <td>{{ user.userRole }}</td>
+            <td>
+              <!-- Button trigger modal -->
+              <button type="button" class="btn btn-primary" data-bs-toggle="modal" :data-bs-target="'#editModal-' + user.userID" @click="editUser(user)">
+                Edit
+              </button>
+
+              <!-- Modal -->
+              <div class="modal fade" :id="'editModal-' + user.userID" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" ref="editModal">
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="exampleModalLabel">Edit User</h5>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                      <!-- Form for editing user -->
+                      <div class="mb-3">
+                        <label for="firstName" class="form-label">First Name</label>
+                        <input type="text" class="form-control" id="firstName" v-model="updatedUser.firstName">
                       </div>
-                      <div class="modal-body">
-                        <!-- Form for editing user -->
-                        <div class="mb-3">
-                          <label for="firstName" class="form-label">First Name</label>
-                          <input type="text" class="form-control" id="firstName" v-model="updatedUser.firstName">
-                        </div>
-                        <div class="mb-3">
-                          <label for="lastName" class="form-label">Last Name</label>
-                          <input type="text" class="form-control" id="lastName" v-model="updatedUser.lastName">
-                        </div>
-                        <div class="mb-3">
-                          <label for="lastName" class="form-label">Email Address</label>
-                          <input type="text" class="form-control" id="lastName" v-model="updatedUser.emailAdd">
-                        </div>
-                        <div class="mb-3">
-                          <label for="lastName" class="form-label">Username</label>
-                          <input type="text" class="form-control" id="lastName" v-model="updatedUser.username">
-                        </div>
+                      <div class="mb-3">
+                        <label for="lastName" class="form-label">Last Name</label>
+                        <input type="text" class="form-control" id="lastName" v-model="updatedUser.lastName">
                       </div>
-                      <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary" @click="saveChanges(user.userID)">Save Changes</button>
+                      <div class="mb-3">
+                        <label for="emailAdd" class="form-label">Email Address</label>
+                        <input type="email" class="form-control" id="emailAdd" v-model="updatedUser.emailAdd">
                       </div>
+                      <div class="mb-3">
+                        <label for="username" class="form-label">Username</label>
+                        <input type="text" class="form-control" id="username" v-model="updatedUser.username">
+                      </div>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                      <button type="button" class="btn btn-primary" @click="saveChanges(user.userID)">Save Changes</button>
                     </div>
                   </div>
                 </div>
-              </td>
-              <td><button type="button" class="btn btn-danger" @click="deleteUser(user.userID)">Delete</button></td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+              </div>
+            </td>
+            <td><button type="button" class="btn btn-danger" @click="deleteUser(user.userID)">Delete</button></td>
+          </tr>
+        </tbody>
+      </table>
     </div>
-  </template>
-  
+  </div>
+</template>
+
 <script>
+import Swal from 'sweetalert2';
+
 export default {
-name: 'Users',
-data() {
+  name: 'Users',
+  data() {
     return {
-    loading: false,
-    updatedUser: {
+      loading: false,
+      updatedUser: {
         firstName: null,
         lastName: null,
         emailAdd: null,
-        username: null,
-    }
+        username: null
+      }
     };
-},
-computed: {
+  },
+  computed: {
     users() {
-    return this.$store.state.users;
-    },
-},
-methods: {
-    async fetchUsers() {
-    this.loading = true;
-    try {
-        await this.$store.dispatch('fetchUsers');
-    } catch (error) {
-        console.error('Error fetching users:', error.message);
-    } finally {
-        this.loading = false;
+      return this.$store.state.users;
     }
+  },
+  methods: {
+    async fetchUsers() {
+      this.loading = true;
+      try {
+        await this.$store.dispatch('fetchUsers');
+      } catch (error) {
+        console.error('Error fetching users:', error.message);
+      } finally {
+        this.loading = false;
+      }
     },
     async deleteUser(userId) {
-    try {
+      try {
         await this.$store.dispatch('deleteUser', userId);
-    } catch (error) {
+        await Swal.fire({
+          icon: 'success',
+          title: 'Success',
+          text: 'User successfully deleted',
+          timer: 1500
+        });
+      } catch (error) {
         console.error('Error deleting user:', error.message);
-    }
+        await Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Failed to delete user'
+        });
+      }
     },
     editUser(user) {
-    this.updatedUser = {
+      this.updatedUser = {
         userID: user.userID,
         firstName: user.firstName,
         lastName: user.lastName,
         emailAdd: user.emailAdd,
         username: user.username,
         userRole: user.userRole
-    };
+      };
     },
     async saveChanges(userID) {
       try {
         await this.$store.dispatch('editUser', { userID, updatedUser: this.updatedUser });
+        await Swal.fire({
+          icon: 'success',
+          title: 'Success',
+          text: 'User successfully updated',
+          timer: 1500
+        });
+        this.$refs['editModal'].hide(); 
       } catch (error) {
         console.error('Error updating user:', error.message);
+        await Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Failed to update user'
+        });
       }
     }
-},
-created() {
+  },
+  created() {
     this.fetchUsers();
-},
+  }
 };
 </script>
+
     
 <style scoped>
 table {
