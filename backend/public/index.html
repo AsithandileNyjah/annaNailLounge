@@ -8,4 +8,230 @@
 <body>
     <h1>Routes Explain</h1>
 </body>
+    <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>API Routes</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <table>
+    <thead>
+      <tr>
+        <th>Route</th>
+        <th>HTTP Method</th>
+        <th>Action</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- Users -->
+      <tr>
+        <td>/users</td>
+        <td>POST</td>
+        <td>addOne</td>
+        <td>Create a new user</td>
+      </tr>
+      <tr>
+        <td>/users</td>
+        <td>GET</td>
+        <td>getAll</td>
+        <td>Get all users</td>
+      </tr>
+      <tr>
+        <td>/users/:userID</td>
+        <td>GET</td>
+        <td>getOne</td>
+        <td>Get a specific user by ID</td>
+      </tr>
+      <tr>
+        <td>/users/:userID</td>
+        <td>PATCH</td>
+        <td>ediOne</td>
+        <td>Edit a specific user by ID</td>
+      </tr>
+      <tr>
+        <td>/users/:userID</td>
+        <td>DELETE</td>
+        <td>delOne</td>
+        <td>Delete a specific user by ID</td>
+      </tr>
+      <!-- Services -->
+      <tr>
+        <td>/services</td>
+        <td>POST</td>
+        <td>servAdd</td>
+        <td>Add a new service</td>
+      </tr>
+      <tr>
+        <td>/services</td>
+        <td>GET</td>
+        <td>getServs</td>
+        <td>Get all services</td>
+      </tr>
+      <tr>
+        <td>/services/:servID</td>
+        <td>GET</td>
+        <td>getServ</td>
+        <td>Get a specific service by ID</td>
+      </tr>
+      <tr>
+        <td>/services/:servID</td>
+        <td>PATCH</td>
+        <td>editServ</td>
+        <td>Edit a specific service by ID</td>
+      </tr>
+      <tr>
+        <td>/services/:servID</td>
+        <td>DELETE</td>
+        <td>servDel</td>
+        <td>Delete a specific service by ID</td>
+      </tr>
+      <!-- Blogs -->
+      <tr>
+        <td>/blogs</td>
+        <td>POST</td>
+        <td>blogAdd</td>
+        <td>Add a new blog</td>
+      </tr>
+      <tr>
+        <td>/blogs</td>
+        <td>GET</td>
+        <td>gBlogs</td>
+        <td>Get all blogs</td>
+      </tr>
+      <tr>
+        <td>/blogs/:blogID</td>
+        <td>GET</td>
+        <td>gBlog</td>
+        <td>Get a specific blog by ID</td>
+      </tr>
+      <tr>
+        <td>/blogs/:blogID</td>
+        <td>PATCH</td>
+        <td>blogEdit</td>
+        <td>Edit a specific blog by ID</td>
+      </tr>
+      <tr>
+        <td>/blogs/:blogID</td>
+        <td>DELETE</td>
+        <td>blogDel</td>
+        <td>Delete a specific blog by ID</td>
+      </tr>
+      <!-- Login -->
+      <tr>
+        <td>/login</td>
+        <td>POST</td>
+        <td>valFun</td>
+        <td>Validate login credentials</td>
+      </tr>
+      <tr>
+        <td>/login</td>
+        <td>GET</td>
+        <td>isAdmin</td>
+        <td>Check if user has admin rights</td>
+      </tr>
+      <!-- Reviews -->
+      <tr>
+        <td>/reviews</td>
+        <td>POST</td>
+        <td>revAdd</td>
+        <td>Add a new review</td>
+      </tr>
+      <tr>
+        <td>/reviews</td>
+        <td>GET</td>
+        <td>revsGet</td>
+        <td>Get all reviews</td>
+      </tr>
+      <tr>
+        <td>/reviews/:display</td>
+        <td>GET</td>
+        <td>displayRev</td>
+        <td>Display reviews by specified criteria</td>
+      </tr>
+      <tr>
+        <td>/reviews/:revID</td>
+        <td>GET</td>
+        <td>revGet</td>
+        <td>Get a specific review by ID</td>
+      </tr>
+      <tr>
+        <td>/reviews/:revID</td>
+        <td>DELETE</td>
+        <td>revDel</td>
+        <td>Delete a specific review by ID</td>
+      </tr>
+      <!-- Comments -->
+      <tr>
+        <td>/comments</td>
+        <td>POST</td>
+        <td>commAdd</td>
+        <td>Add a new comment</td>
+      </tr>
+      <tr>
+        <td>/comments</td>
+        <td>GET</td>
+        <td>commsGet</td>
+        <td>Get all comments</td>
+      </tr>
+      <tr>
+        <td>/comments/:display</td>
+        <td>GET</td>
+        <td>displayComms</td>
+        <td>Display comments by specified criteria</td>
+      </tr>
+      <tr>
+        <td>/comments/:commentID</td>
+        <td>GET</td>
+        <td>commGet</td>
+        <td>Get a specific comment by ID</td>
+      </tr>
+      <tr>
+        <td>/comments/:commentID</td>
+        <td>DELETE</td>
+        <td>delComm</td>
+        <td>Delete a specific comment by ID</td>
+      </tr>
+      <!-- Appointments -->
+      <tr>
+        <td>/appointments</td>
+        <td>POST</td>
+        <td>authMiddleware, appMake</td>
+        <td>Create a new appointment with authentication middleware</td>
+      </tr>
+      <tr>
+        <td>/appointments</td>
+        <td>GET</td>
+        <td>appsGet</td>
+        <td>Get all appointments</td>
+      </tr>
+      <tr>
+        <td>/appointments/:appID</td>
+        <td>GET</td>
+//style 
+body {
+  font-family: Arial, sans-serif;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th, td {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+}
+
+th {
+  background-color: #f2f2f2;
+}
+
+tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
 </html>
