@@ -119,7 +119,7 @@ const delServ = async(servID)=>{
 const addBlog = async(blogTitle, blogAuthor, intro, blog, blogCover)=>{
     await pool.query(`
     INSERT INTO blogs (blogTitle, blogAuthor, intro, blog, blogCover)
-     VALUES (?, ?, ?, ?);
+     VALUES (?, ?, ?, ?, ?);
     `,[blogTitle, blogAuthor, intro, blog, blogCover])
 }
 
