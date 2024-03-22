@@ -161,14 +161,15 @@ const delBlog = async(blogID)=>{
 }
 
 // login
-const login = async (username) => {
-    const [[{ userPass }]] = await pool.query(`
-        SELECT userPass
+const login = async (username, userPass) => {
+    const [[{ user }]] = await pool.query(`
+        SELECT *
         FROM users
-        WHERE username = ?
-    `, [username]);
-    return userPass;
+        WHERE username = ? AND userPass = ?
+    `, [username, userPass]);
+    return user;
 };
+
 
 const adminRights = async (username) => {
     const [[{ userRole }]] = await pool.query(`
