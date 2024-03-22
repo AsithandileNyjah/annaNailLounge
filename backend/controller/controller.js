@@ -63,7 +63,7 @@ const getOne = async (req, res) => {
 };
 
 const ediOne = async (req, res) => {
-    const { firstName, lastName, emailAdd, username } = req.body;
+    const { firstName, lastName, emailAdd, userRole, username } = req.body;
     const userID = parseInt(req.params.userID);
     if (isNaN(userID)) {
         res.status(400).send('Invalid user ID');
@@ -71,7 +71,7 @@ const ediOne = async (req, res) => {
     }
 
     try {
-        const result = await editUser(firstName, lastName, emailAdd, username, userID);
+        const result = await editUser(firstName, lastName, emailAdd, username, userRole, userID);
         if (result.success) {
             const updatedUsers = await getUsers();
             res.json(updatedUsers);
