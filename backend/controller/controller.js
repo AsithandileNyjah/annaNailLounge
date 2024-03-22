@@ -191,10 +191,10 @@ const valFun = async (req, res) => {
 
         // Extract the hashed password from the user object
         const hashedPassword = user.userPass;
-
+        const { userRole, userID } = user;
         const match = await bcrypt.compare(userPass, hashedPassword);
         if (match) {
-            const token = jwt.sign({ username: username }, process.env.SECRET_KEY, { expiresIn: '1h' });
+            const token = jwt.sign({ username: username, userRole: userRole, userID: userID }, process.env.SECRET_KEY, { expiresIn: '1h' });
             res.cookie('jwt', token, { httpOnly: false, expiresIn: '1h' });
             return res.status(200).json({ token: token });
         } else {
@@ -205,7 +205,6 @@ const valFun = async (req, res) => {
         return res.status(500).json({ msg: 'An error occurred' });
     }
 };
-
 
 
 const isAdmin = async (req, res) => {
