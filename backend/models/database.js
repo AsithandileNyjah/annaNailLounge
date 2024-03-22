@@ -161,7 +161,7 @@ const delBlog = async(blogID)=>{
 }
 
 // login
-const login = async (username, userPass) => {
+const login = async (username) => {
     const [[{ userPass }]] = await pool.query(`
         SELECT userPass
         FROM users
