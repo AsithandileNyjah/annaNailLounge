@@ -6,12 +6,9 @@
         <h2>Welcome to Anna Nail Lounge</h2>
         </div>
     </div>
-    <div class="col-md-3">
-        <img src="https://cdn-thumbs.imagevenue.com/f0/7d/86/ME17UD9C_t.jpg" alt="Anna Nail Lounge" class="center-image">
-    </div>
     </div>
     <div class="row">
-    <div class="col-md-6">
+    <div class="col">
         <div class="animation-text">
         <p class="typed-text">{{ typedMessage }}</p>
         <br>
@@ -56,6 +53,8 @@ methods: {
 <style>
 .container {
 padding-top: 50px;
+background-attachment: fixed;
+background-attachment: src="https://cdn-thumbs.imagevenue.com/f0/7d/86/ME17UD9C_t.jpg"
 }
 
 .welcome-text {

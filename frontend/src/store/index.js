@@ -3,6 +3,8 @@ import axios from 'axios'
 
 import jwtDecode from 'jwt-decode'
 
+import router from '../router'
+
 const baseURL = 'https://annanaillounge.onrender.com'
 
 export default createStore({
@@ -211,29 +213,22 @@ actions: {
   async fetchBlogs({ commit }) {
     try {
       const response = await axios.get(`${baseURL}/blogs`);
-      console.log(response);
       commit('setBlogs', response.data);
-      console.log(response.data);
     } catch (error) {
       console.error('Error fetching blogs:', error.response.data);
       throw new Error('Failed to fetch blogs. Please try again later.');
     }
   },
-  async fetchBlog(blogID) {
-    try {
-      const response = await axios.get(`${baseURL}/blogs/${blogID}`);
-      console.log(response);
-      if (response && response.data) {
-        this.$store.commit('setBlogs', response.data);
-        console.log(response.data);
-      } else {
-        throw new Error('Failed to fetch blog data.');
-      }
-    } catch (error) {
-      console.error('Error fetching blog:', error);
-      throw new Error('Failed to fetch blog. Please try again later.');
-    }
-  }, 
+async fetchBlog({ commit }, blogID) {
+  try {
+    const response = await axios.get(`${baseURL}/blogs/${blogID}`);
+    commit('setBlog', response.data); 
+    console.log('Response:', response);
+  } catch (error) {
+    console.error('Error fetching blog:', error.response.data);
+    throw new Error('Failed to fetch blog. Please try again later.');
+  }
+},
     async createBlog({ commit }, blogData) {
       try {
         const response = await axios.post(`${baseURL}/blogs`, blogData);
@@ -318,7 +313,7 @@ actions: {
       if (data && data.token) {
         $cookies.set('jwt', data.token);
         commit('setLogged', true);
-        window.location.reload()
+        await router.push('/')
       } else {
         throw new Error('Invalid response from server');
       }
@@ -326,7 +321,12 @@ actions: {
       console.error('Login failed:', error);
       throw new Error('Login failed');
     }
-  }
+  },
+  async logout(context){
+    let cookies = $cookies.keys()
+    $cookies.remove('jwt')
+    window.location.reload()
+  },
     },
 modules: {
 }

@@ -35,6 +35,9 @@
               <li class="nav-item">
                 <router-link to="/contact" class="nav-link bg-dark">Contact Us</router-link>
               </li>
+              <li class="nav-item">
+                <button type="button" class="btn btn-danger" v-if="$cookies.get('jwt')" @click="logout">Logout</button>
+              </li>
             </ul>
           </div>
         </div>
@@ -45,9 +48,24 @@
   
 <script>
 export default {
-    name: 'Navbar'
+  name: 'Navbar',
+  data() {
+    return {
+    };
+  },
+  computed: {
+    logUser() {
+      return this.$store.state.userrole === 'admin';
+    }
+  },
+  methods: {
+    logout() {
+      this.$store.dispatch('logout');
+    }
+  }
 }
 </script>
+  
 <style>
 .logo {
   animation: rotate 5s linear infinite;
@@ -68,6 +86,6 @@ export default {
 }
 
 .collapse{
-    margin-left: 60%;
+    margin-left: 55%;
 }
 </style>

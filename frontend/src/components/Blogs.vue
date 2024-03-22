@@ -11,7 +11,7 @@
             <div class="card-body">
               <h5 class="card-title">{{ blog.blogTitle }}</h5>
               <p class="card-text">{{ blog.intro }}</p>
-              <router-link @click="fetchBlog(blog.blogID)" :to="{ path:'/blogview/' + blog.blogID}" class="btn btn-primary">View Blog</router-link>
+              <router-link @click="fetchBlog(blog.blogID)" :to="{name:'blogview', params:{blogID: blog.blogID}}" class="btn btn-primary">View Blog</router-link>
             </div>
           </div>
         </div>
@@ -21,7 +21,7 @@
 </template>
 
 <script>
-import axios from 'axios';
+import { mapActions } from 'vuex';
 
 export default {
   name: 'Blogs',
@@ -39,27 +39,14 @@ export default {
     this.fetchBlogs();
   },
   methods: {
-    async fetchBlogs() {
-      this.loading = true;
-      try {
-        await this.$store.dispatch('fetchBlogs');
-      } catch (error) {
-        console.error('Error fetching blogs:', error.message);
-      } finally {
-        this.loading = false;
-      }
-    },
+    ...mapActions(['fetchBlogs', 'setBlog']),
     async fetchBlog(blogID) {
       try {
-        const response = await axios.get(`${baseURL}/blogs/${blogID}`);
-        console.log(response);
-        this.$store.commit('setBlogs', response.data);
-        console.log(response.data);
+        await this.fetchBlog(blogID);
       } catch (error) {
-        console.error('Error fetching blog:', error.response.data);
-        throw new Error('Failed to fetch blog. Please try again later.');
+        console.error('Error fetching blog:', error.message);
       }
-    },
+    }
   },
 };
 </script>

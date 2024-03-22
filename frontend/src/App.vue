@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="page">
     <Navabar></Navabar>
     
     <Footer></Footer>
@@ -9,7 +9,12 @@
 <style>
 Navabar {
   margin-bottom: 10px;
+  margin-top: 100vh;
 }
+.page{
+  background-size: cover;
+}
+
 </style>
 
 <script>

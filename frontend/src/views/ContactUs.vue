@@ -20,9 +20,9 @@
     <div class="col-md-6">
         <div class="contact-info">
         <h3>Contact Information</h3>
-        <p><strong>Address:</strong> 123 Main St, City, Country</p>
-        <p><strong>Email:</strong> info@example.com</p>
-        <p><strong>Phone:</strong> +1234567890</p>
+        <p><strong>Address:</strong> 314 Imam Haron Road, Lansdowne, 7081</p>
+        <p><strong>Email:</strong> info@annanaillounge.com</p>
+        <p><strong>Phone:</strong> +27 899 3523</p>
         </div>
     </div>
     </div>

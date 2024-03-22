@@ -22,43 +22,40 @@
 </footer>
 </template>
 
-<script>
-export default ({
-components: {
-
-}
-});
-</script>
-
 <style>
 .footer {
-background-color: #333;
-color: #fff;
-padding: 30px 0;
+    background-color: #333;
+    color: #fff;
+    padding: 30px 0;
+    position: flex;
+    bottom: 0;
+    width: 100%;
 }
 
 .footer h4 {
-color: #fff;
+    color: #fff;
 }
 
 .social-icons a {
-color: #fff;
-margin-right: 10px;
+    color: #fff;
+    margin-right: 10px;
 }
 
 .social-icons a:hover {
-color: #55acee;
+    color: #55acee;
 }
 
 .social-icons a:hover {
-color: #3f729b; 
+    color: #3f729b; 
 }
 
 .social-icons a:hover {
-color: #e4405f;
+    color: #e4405f;
 }
 
 .social-icons a:hover {
-color: #25d366; 
+    color: #25d366; 
 }
 </style>
+
+  
