@@ -44,14 +44,14 @@ const getUser = async (userID)=>{
     return user
 }
 
-const editUser = async (firstName, lastName, emailAdd, username, userID) => {
+const editUser = async (firstName, lastName, emailAdd, userRole, username, userID) => {
     try {
         // Perform the update query without considering username uniqueness
         await pool.query(`
             UPDATE users 
-            SET firstName = ?, lastName = ?, emailAdd = ?, username = ?
+            SET firstName = ?, lastName = ?, emailAdd = ?, username = ?, userRole = ?
             WHERE userID = ?`,
-            [firstName, lastName, emailAdd, username, userID]
+            [firstName, lastName, emailAdd, username, userRole, userID]
         );
         
         // Return a success message or handle the result as needed
