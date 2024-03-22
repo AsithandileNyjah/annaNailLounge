@@ -270,8 +270,6 @@ const commDisplay = async(req,res)=>{
 
 const makeApp = async (req, res) => {
     const { service, appDate, appTime, addOns } = req.body;
-    const { username } = req; // Assuming the username is decoded and available in the request object
-
     try {
         const [appointment] = await pool.query(`
             INSERT INTO appointments (username, service, appDate, appTime, addOns) 
